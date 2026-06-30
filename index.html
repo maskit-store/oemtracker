@@ -1,0 +1,1977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OEM Tracker – PT SAINSGO KARYA INDONESIA</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome for Premium Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <script>
+    // Memasukkan palette warna kustom sesuai revisi user ke dalam konfigurasi Tailwind
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brandYellow: '#FED811',       // Yellow (FED811)
+            brandTurquoise: '#02CECB',    // Turquoise (02CECB)
+            brandWhite: '#F7F7E3',        // Warm White (F7F7E3)
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #F7F7E3; /* Tema warna dasar brandWhite */
+    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F7F7E3;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #02CECB;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #FED811;
+    }
+  </style>
+</head>
+<body class="text-slate-800 min-h-screen flex flex-col">
+
+  <!-- LOADING SPINNER COVER -->
+  <div id="globalSpinner" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm hidden">
+    <div class="bg-white p-6 rounded-2xl shadow-xl flex flex-col items-center space-y-4 border-2 border-brandTurquoise">
+      <svg class="animate-spin h-10 w-10 text-brandTurquoise" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      <span class="text-sm font-semibold text-slate-700" id="spinnerMsg">Processing Request...</span>
+    </div>
+  </div>
+
+  <!-- NOTIFICATION TOAST -->
+  <div id="toast" class="fixed top-5 right-5 z-50 transform translate-y-[-100px] opacity-0 transition-all duration-300 ease-out flex items-center space-x-3 p-4 rounded-xl shadow-lg max-w-sm">
+    <div id="toastIcon" class="text-xl"></div>
+    <div id="toastText" class="text-sm font-bold text-slate-900"></div>
+  </div>
+
+  <!-- 1. LOGIN SCREEN -->
+  <div id="loginScreen" class="flex-1 flex flex-col items-center justify-center p-4">
+    <div class="bg-white p-8 rounded-2xl shadow-xl border-4 border-brandYellow w-full max-w-md transition-all">
+      <div class="text-center mb-8">
+        <div class="inline-flex p-3 bg-brandYellow/20 text-slate-950 rounded-2xl mb-4 border border-brandYellow">
+          <i class="fa-solid fa-industry text-3xl"></i>
+        </div>
+        <h1 class="text-2xl font-black text-slate-950 tracking-tight">OEM TRACKER</h1>
+        <p class="text-slate-700 text-xs mt-1 font-bold">PT SAINSGO KARYA INDONESIA</p>
+        <p class="text-slate-500 text-[10px] mt-1 leading-relaxed">Cosmetics, Foods, Traditional Herbal & Household Products</p>
+      </div>
+
+      <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-5">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Username</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+              <i class="fa-regular fa-user"></i>
+            </span>
+            <input type="text" id="loginUsername" required class="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brandTurquoise text-sm" placeholder="Enter username">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Password</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+              <i class="fa-solid fa-lock"></i>
+            </span>
+            <input type="password" id="loginPassword" required class="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-brandTurquoise text-sm" placeholder="Enter password">
+          </div>
+        </div>
+
+        <button type="submit" class="w-full py-3 bg-brandTurquoise hover:bg-[#02b1af] text-slate-900 font-bold rounded-xl text-sm transition shadow-lg shadow-brandTurquoise/20">
+          Sign In
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. MAIN DASHBOARD CONTAINER -->
+  <div id="mainDashboard" class="flex-1 flex flex-col md:flex-row hidden">
+    
+    <!-- SIDEBAR CONTAINER (Responsif untuk Mobile & Desktop) -->
+    <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-950/50 z-20 hidden md:hidden"></div>
+    
+    <aside id="sidebarContainer" class="fixed md:static inset-y-0 left-0 z-30 w-64 bg-slate-950 text-white flex flex-col shrink-0 border-r border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
+      <div class="p-6 border-b border-slate-800 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <span class="p-2 bg-brandYellow rounded-xl text-slate-950">
+            <i class="fa-solid fa-industry"></i>
+          </span>
+          <div>
+            <h2 class="font-extrabold text-xs tracking-tight text-brandYellow">OEM TRACKER</h2>
+            <p class="text-[9px] text-brandTurquoise font-bold uppercase">PT SAINSGO KI</p>
+          </div>
+        </div>
+        <!-- Button Close Sidebar untuk Mobile -->
+        <button onclick="toggleSidebar()" class="md:hidden text-slate-400 hover:text-white transition">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- User Context -->
+      <div class="px-6 py-4 border-b border-slate-800 bg-slate-900/40">
+        <p class="text-[10px] text-slate-400">Logged in as:</p>
+        <p class="font-bold text-sm truncate text-brandTurquoise" id="sessionUserName">Administrator</p>
+        <div class="flex items-center justify-between mt-1">
+          <span class="text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded font-medium" id="sessionUserDivision">Management</span>
+          <span class="text-[9px] bg-brandYellow text-slate-950 px-1.5 py-0.5 rounded uppercase font-bold" id="sessionUserRole">Admin</span>
+        </div>
+      </div>
+
+      <!-- Navigation links -->
+      <nav class="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto">
+        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition duration-150 text-slate-400 hover:bg-slate-900 hover:text-white">
+          <i class="fa-solid fa-chart-line w-5 text-brandYellow"></i>
+          <span>Dashboard</span>
+        </button>
+        
+        <button onclick="switchTab('projects')" id="nav-projects" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition duration-150 text-slate-400 hover:bg-slate-900 hover:text-white">
+          <i class="fa-solid fa-list-check w-5 text-brandTurquoise"></i>
+          <span>Tracking Projects</span>
+        </button>
+
+        <button onclick="switchTab('prospects')" id="nav-prospects" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition duration-150 text-slate-400 hover:bg-slate-900 hover:text-white">
+          <i class="fa-solid fa-user-clock w-5 text-brandYellow"></i>
+          <span>Status Prospect</span>
+        </button>
+
+        <button onclick="switchTab('customers')" id="nav-customers" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition duration-150 text-slate-400 hover:bg-slate-900 hover:text-white">
+          <i class="fa-solid fa-users w-5 text-brandTurquoise"></i>
+          <span>Customer Database</span>
+        </button>
+
+        <button onclick="switchTab('users')" id="nav-users" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition duration-150 text-slate-400 hover:bg-slate-900 hover:text-white hidden-admin">
+          <i class="fa-solid fa-user-gear w-5 text-brandYellow"></i>
+          <span>User Management</span>
+        </button>
+      </nav>
+
+      <div class="p-4 border-t border-slate-800">
+        <button onclick="handleLogout()" class="w-full flex items-center justify-center space-x-2 px-4 py-2.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 font-semibold rounded-xl text-xs transition">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span>Sign Out</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- CONTENT WRAPPER -->
+    <main class="flex-1 flex flex-col overflow-x-hidden min-h-screen">
+      
+      <!-- HEADER UTAMA -->
+      <header class="bg-white border-b border-slate-200 py-4 px-6 md:px-8 flex items-center justify-between shadow-sm shrink-0">
+        <div class="flex items-center space-x-3">
+          <!-- Button Hamburger untuk Mobile -->
+          <button onclick="toggleSidebar()" class="md:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg">
+            <i class="fa-solid fa-bars text-lg"></i>
+          </button>
+          <div>
+            <h1 class="text-sm md:text-lg font-black text-slate-900 tracking-tight" id="currentViewTitle">Dashboard Summary</h1>
+            <p class="text-[9px] md:text-xs text-brandTurquoise font-extrabold uppercase tracking-widest hidden md:block">OEM TRACKER – PT SAINSGO KARYA INDONESIA</p>
+          </div>
+        </div>
+        
+        <div class="flex items-center space-x-4">
+          <button onclick="fetchAllData()" class="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition" title="Reload Sheet Data">
+            <i class="fa-solid fa-arrows-rotate"></i>
+          </button>
+          <div class="h-6 w-[1px] bg-slate-300"></div>
+          <span class="text-[10px] md:text-xs text-slate-500 font-bold bg-brandYellow/30 px-2.5 py-1 rounded-full border border-brandYellow">PSI-Active</span>
+        </div>
+      </header>
+
+      <!-- ACTIVE TAB PANELS -->
+      <div class="flex-1 p-4 md:p-8 overflow-y-auto">
+        
+        <!-- 2A. TAB: DASHBOARD SUMMARY -->
+        <div id="tab-dashboard" class="tab-panel space-y-6 md:space-y-8">
+          <!-- Banner Mobile & Deskripsi Singkat -->
+          <div class="bg-white p-5 rounded-2xl border-2 border-brandTurquoise shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div>
+              <h2 class="text-lg font-bold text-slate-900">OEM TRACKER – PT SAINSGO KARYA INDONESIA</h2>
+              <p class="text-xs text-slate-600 mt-1">Aplikasi monitoring progres maklon pangan, kosmetik, obat tradisional, dan PKRT secara real-time.</p>
+            </div>
+            <a href="https://docs.google.com/spreadsheets/d/1rKy-0w7etx1bPemgEIEJTDU849LPBtxcIevdXbv8JAM/edit" target="_blank" class="px-4 py-2 bg-brandYellow hover:bg-[#ebd00f] text-slate-900 font-bold text-xs rounded-xl border border-brandYellow transition flex items-center space-x-1.5 self-stretch md:self-auto justify-center">
+              <i class="fa-solid fa-file-excel"></i>
+              <span>Buka Google Sheet</span>
+            </a>
+          </div>
+
+          <!-- STATS CARDS -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:grid-cols-4">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between">
+              <div>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Customers</p>
+                <h3 class="text-3xl font-black text-slate-900 mt-2" id="statCustomers">0</h3>
+              </div>
+              <div class="p-3.5 bg-brandYellow/20 text-slate-800 rounded-2xl border border-brandYellow">
+                <i class="fa-solid fa-users text-2xl"></i>
+              </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between">
+              <div>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Active Prospects</p>
+                <h3 class="text-3xl font-black text-slate-900 mt-2" id="statProspects">0</h3>
+              </div>
+              <div class="p-3.5 bg-brandTurquoise/20 text-slate-800 rounded-2xl border border-brandTurquoise">
+                <i class="fa-solid fa-user-clock text-2xl"></i>
+              </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between">
+              <div>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Active Projects</p>
+                <h3 class="text-3xl font-black text-slate-900 mt-2" id="statProjects">0</h3>
+              </div>
+              <div class="p-3.5 bg-brandYellow/20 text-slate-800 rounded-2xl border border-brandYellow">
+                <i class="fa-solid fa-cubes text-2xl"></i>
+              </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between">
+              <div>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Average Progress</p>
+                <h3 class="text-3xl font-black text-slate-900 mt-2" id="statAvgProgress">0%</h3>
+              </div>
+              <div class="p-3.5 bg-brandTurquoise/20 text-slate-800 rounded-2xl border border-brandTurquoise">
+                <i class="fa-solid fa-chart-pie text-2xl"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- RECENT DISPATCH AND CHARTS -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4">
+              <h3 class="font-extrabold text-slate-900 text-base">Key Capabilities & Divisions</h3>
+              <p class="text-xs text-slate-500">Track complex cosmetics, herbal cosmetics, health items, food, and PKRT items progress step by step inside Google Sheets.</p>
+              
+              <div class="space-y-3 pt-2">
+                <div class="flex justify-between items-center text-xs text-slate-600">
+                  <span class="font-bold text-slate-700">Cosmetics Progress Rate</span>
+                  <span class="bg-brandYellow/20 text-slate-800 px-2 py-0.5 rounded font-bold border border-brandYellow">High Demand</span>
+                </div>
+                <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                  <div class="bg-brandYellow h-full rounded-full" style="width: 85%"></div>
+                </div>
+                
+                <div class="flex justify-between items-center text-xs text-slate-600">
+                  <span class="font-bold text-slate-700">Traditional Herbal Register rate</span>
+                  <span class="bg-brandTurquoise/20 text-slate-800 px-2 py-0.5 rounded font-bold border border-brandTurquoise">Active BPOM</span>
+                </div>
+                <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                  <div class="bg-brandTurquoise h-full rounded-full" style="width: 65%"></div>
+                </div>
+
+                <div class="flex justify-between items-center text-xs text-slate-600">
+                  <span class="font-bold text-slate-700">Food & PKRT OEM Projects</span>
+                  <span class="bg-brandYellow/20 text-slate-800 px-2 py-0.5 rounded font-bold border border-brandYellow">Ongoing</span>
+                </div>
+                <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                  <div class="bg-[#ebd00f] h-full rounded-full" style="width: 48%"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- QUICK GUIDE -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
+              <div>
+                <h3 class="font-extrabold text-slate-900 text-base mb-2">Automated Project Tracking System</h3>
+                <p class="text-xs text-slate-500 mb-4 leading-relaxed">Each department has individual checklists. File naming is standardized based on customer inputs, brand references, and document types. Document storage links will sync to GDrive instantaneously.</p>
+              </div>
+              <div class="grid grid-cols-2 gap-4 pt-4 border-t border-slate-200">
+                <div class="flex items-center space-x-3">
+                  <span class="p-2 bg-brandYellow/20 text-slate-800 rounded-xl border border-brandYellow"><i class="fa-solid fa-folder-open text-sm"></i></span>
+                  <div>
+                    <p class="text-[9px] uppercase font-bold text-slate-400">Database ID</p>
+                    <a href="https://docs.google.com/spreadsheets/d/1rKy-0w7etx1bPemgEIEJTDU849LPBtxcIevdXbv8JAM/edit" target="_blank" class="text-xs font-bold text-slate-900 hover:underline">Google Sheet</a>
+                  </div>
+                </div>
+                <div class="flex items-center space-x-3">
+                  <span class="p-2 bg-brandTurquoise/20 text-slate-800 rounded-xl border border-brandTurquoise"><i class="fa-solid fa-cloud-arrow-up text-sm"></i></span>
+                  <div>
+                    <p class="text-[9px] uppercase font-bold text-slate-400">GDrive Target</p>
+                    <a href="https://drive.google.com/drive/folders/1fcp5BtFHOvcabjG4xFTbZewwmRhzqESq?usp=sharing" target="_blank" class="text-xs font-bold text-slate-900 hover:underline">Shared GDrive</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2B. TAB: TRACKING PROJECTS -->
+        <div id="tab-projects" class="tab-panel space-y-6 hidden">
+          <!-- PROJECTS MAIN SCREEN -->
+          <div id="projectMainSection" class="space-y-6">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+              <!-- Search & Filter -->
+              <div class="flex flex-col sm:flex-row flex-1 gap-3 max-w-2xl">
+                <div class="relative flex-1">
+                  <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                  </span>
+                  <input type="text" id="projectSearch" oninput="filterProjectsTable()" class="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brandTurquoise" placeholder="Search product or customer...">
+                </div>
+                <select id="projectCategoryFilter" onchange="filterProjectsTable()" class="border border-slate-200 rounded-xl text-sm px-3 py-2 bg-white focus:outline-none focus:border-brandTurquoise">
+                  <option value="">All Categories</option>
+                  <option value="Kosmetik">Kosmetik</option>
+                  <option value="Pangan">Pangan</option>
+                  <option value="Obat Tradisional">Obat Tradisional</option>
+                  <option value="PKRT">PKRT</option>
+                </select>
+              </div>
+              <button onclick="openAddProjectModal()" class="flex items-center justify-center space-x-2 px-5 py-2.5 bg-brandTurquoise hover:bg-[#02b1af] text-slate-900 font-bold rounded-xl text-sm transition shadow-md shadow-brandTurquoise/10 self-stretch lg:self-auto">
+                <i class="fa-solid fa-plus"></i>
+                <span>Add New Project</span>
+              </button>
+            </div>
+
+            <!-- PROJECTS TABLE -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+              <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse min-w-[700px]">
+                  <thead>
+                    <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 text-xs font-bold uppercase tracking-wider">
+                      <th class="px-6 py-4">ID</th>
+                      <th class="px-6 py-4">Customer Name</th>
+                      <th class="px-6 py-4">Category</th>
+                      <th class="px-6 py-4">Product Name</th>
+                      <th class="px-6 py-4">Qty & Price</th>
+                      <th class="px-6 py-4">Overall Progress</th>
+                      <th class="px-6 py-4">Project Duration</th>
+                      <th class="px-6 py-4 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="projectsTableBody" class="divide-y divide-slate-100 text-slate-700 text-sm">
+                    <!-- Dynamic Rows -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- DETAIL / PROGRESS EDIT PANEL (Hidden by Default) -->
+          <div id="projectDetailSection" class="bg-white p-4 md:p-8 rounded-2xl shadow-sm border border-slate-200 space-y-6 md:space-y-8 hidden">
+            <!-- HEADER INFO -->
+            <div class="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-slate-200 gap-6">
+              <div class="space-y-2">
+                <button onclick="backToProjectList()" class="inline-flex items-center space-x-2 text-brandTurquoise hover:text-[#01a7a5] transition font-extrabold text-xs uppercase tracking-wider mb-2">
+                  <i class="fa-solid fa-arrow-left"></i>
+                  <span>Back to projects list</span>
+                </button>
+                <div class="flex flex-wrap items-center gap-2">
+                  <h2 class="text-xl md:text-2xl font-black text-slate-900" id="detailProductName">Super Whitening Serum</h2>
+                  <span class="px-3 py-1 bg-brandTurquoise/10 text-slate-900 text-xs rounded-full font-bold uppercase border border-brandTurquoise" id="detailProductCategory">Kosmetik</span>
+                </div>
+                <p class="text-xs md:text-sm text-slate-500">Customer: <span id="detailCustomerName" class="font-bold text-slate-800">John Doe</span> | ID: <span id="detailProjectId" class="font-mono text-xs font-semibold">PROJ101</span></p>
+              </div>
+
+              <!-- DURATION & OVERALL PROGRESS DISPLAY (Top of each project sheet) -->
+              <div class="flex flex-col sm:flex-row gap-4">
+                <!-- Count Days Container (REVISI 2) -->
+                <div id="detailProjectDurationContainer" class="flex items-center space-x-3 bg-white p-4 rounded-2xl border-2 border-brandYellow min-w-[200px]">
+                  <div class="text-center shrink-0">
+                    <span class="p-3 bg-brandYellow/20 text-slate-950 rounded-xl inline-block border border-brandYellow">
+                      <i class="fa-solid fa-calendar-day text-lg"></i>
+                    </span>
+                  </div>
+                  <div>
+                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Project Duration</p>
+                    <p class="text-sm font-black text-slate-900 mt-0.5" id="detailProjectDurationDays">0 Days</p>
+                    <p class="text-[9px] text-slate-500 font-semibold" id="detailProjectDurationLabel">Since DP Payment</p>
+                  </div>
+                </div>
+
+                <!-- Circular Progress Bar Container -->
+                <div class="flex items-center space-x-4 bg-slate-50 p-4 rounded-2xl border border-slate-200 min-w-[200px]">
+                  <div class="relative flex items-center justify-center">
+                    <div class="text-center">
+                      <span class="text-2xl md:text-3xl font-black text-brandTurquoise" id="detailProgressPercent">0%</span>
+                      <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Progress</p>
+                    </div>
+                  </div>
+                  <div class="flex-1 space-y-1">
+                    <p class="text-[10px] text-slate-500 font-bold uppercase" id="detailProgressDesc">Initializing steps...</p>
+                    <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                      <div id="detailProgressBar" class="bg-brandTurquoise h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SPECS INFO -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 bg-slate-50 p-6 rounded-2xl border border-slate-200">
+              <div>
+                <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Order Qty</p>
+                <p class="font-bold text-slate-900 text-sm md:text-base mt-1" id="detailQty">0 pcs</p>
+              </div>
+              <div>
+                <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Price (per pcs)</p>
+                <p class="font-bold text-slate-900 text-sm md:text-base mt-1" id="detailPrice">IDR 0</p>
+              </div>
+              <div>
+                <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Total Value</p>
+                <p class="font-black text-brandTurquoise text-sm md:text-base mt-1" id="detailTotalValue">IDR 0</p>
+              </div>
+              <div>
+                <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Packaging Details</p>
+                <p class="font-semibold text-slate-600 text-xs mt-1 leading-relaxed line-clamp-2" id="detailPackaging">N/A</p>
+              </div>
+            </div>
+
+            <!-- 12 PROJECT STAGES CHECKLIST & UPLOADER -->
+            <div class="space-y-4">
+              <div class="flex items-center justify-between">
+                <h3 class="font-black text-slate-900 text-sm md:text-base">Interactive Departmental Checklist</h3>
+                <span class="text-[10px] text-slate-500 font-bold bg-brandYellow/20 px-2.5 py-1 rounded-full border border-brandYellow"><i class="fa-solid fa-lock"></i> Auto-saves to Sheet</span>
+              </div>
+
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="stagesContainer">
+                <!-- 12 Dynamic Step Cards generated via JavaScript -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2C. TAB: STATUS PROSPECT -->
+        <div id="tab-prospects" class="tab-panel space-y-6 hidden">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="relative flex-1 max-w-md">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </span>
+              <input type="text" id="prospectSearch" oninput="filterProspectsTable()" class="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brandTurquoise" placeholder="Search prospect customers...">
+            </div>
+            <button onclick="openAddProspectModal()" class="flex items-center justify-center space-x-2 px-5 py-2.5 bg-brandTurquoise hover:bg-[#02b1af] text-slate-900 font-bold rounded-xl text-sm transition shadow-md shadow-brandTurquoise/10 self-stretch sm:self-auto">
+              <i class="fa-solid fa-plus"></i>
+              <span>Add / Update Prospect Status</span>
+            </button>
+          </div>
+
+          <!-- PROSPECTS TABLE -->
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse min-w-[650px]">
+                <thead>
+                  <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 text-xs font-bold uppercase tracking-wider">
+                    <th class="px-6 py-4">ID</th>
+                    <th class="px-6 py-4">Date Updated</th>
+                    <th class="px-6 py-4">Customer Name</th>
+                    <th class="px-6 py-4">Stage Status</th>
+                    <th class="px-6 py-4">Prospect Document</th>
+                    <th class="px-6 py-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="prospectsTableBody" class="divide-y divide-slate-100 text-slate-700 text-sm">
+                  <!-- Dynamic Rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2D. TAB: CUSTOMER DATABASE -->
+        <div id="tab-customers" class="tab-panel space-y-6 hidden">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="relative flex-1 max-w-md">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </span>
+              <input type="text" id="customerSearch" oninput="filterCustomersTable()" class="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brandTurquoise" placeholder="Search name, brand, or email...">
+            </div>
+            <button onclick="openAddCustomerModal()" id="addCustBtn" class="flex items-center justify-center space-x-2 px-5 py-2.5 bg-brandTurquoise hover:bg-[#02b1af] text-slate-900 font-bold rounded-xl text-sm transition shadow-md shadow-brandTurquoise/10 hidden-user self-stretch sm:self-auto">
+              <i class="fa-solid fa-user-plus"></i>
+              <span>Add New Customer</span>
+            </button>
+          </div>
+
+          <!-- CUSTOMERS TABLE -->
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse min-w-[750px]">
+                <thead>
+                  <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 text-xs font-bold uppercase tracking-wider">
+                    <th class="px-6 py-4">ID</th>
+                    <th class="px-6 py-4">Customer Details</th>
+                    <th class="px-6 py-4">Corporate & Brand</th>
+                    <th class="px-6 py-4">Addresses / Notes</th>
+                    <th class="px-6 py-4">GDrive Folders</th>
+                    <th class="px-6 py-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="customersTableBody" class="divide-y divide-slate-100 text-slate-700 text-sm">
+                  <!-- Dynamic Rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2E. TAB: USER MANAGEMENT -->
+        <div id="tab-users" class="tab-panel space-y-6 hidden">
+          <div class="flex justify-end">
+            <button onclick="openAddUserModal()" class="flex items-center justify-center space-x-2 px-5 py-2.5 bg-brandTurquoise hover:bg-[#02b1af] text-slate-900 font-bold rounded-xl text-sm transition shadow-md shadow-brandTurquoise/10">
+              <i class="fa-solid fa-plus"></i>
+              <span>Add New User</span>
+            </button>
+          </div>
+
+          <!-- USERS TABLE -->
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse min-w-[600px]">
+                <thead>
+                  <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 text-xs font-bold uppercase tracking-wider">
+                    <th class="px-6 py-4">ID</th>
+                    <th class="px-6 py-4">Name</th>
+                    <th class="px-6 py-4">Division</th>
+                    <th class="px-6 py-4">Username</th>
+                    <th class="px-6 py-4">System Role</th>
+                    <th class="px-6 py-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="usersTableBody" class="divide-y divide-slate-100 text-slate-700 text-sm">
+                  <!-- Dynamic Rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- --- MODALS VIEW --- -->
+
+  <!-- A. USER MANAGEMENT MODAL -->
+  <div id="userModal" class="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-md overflow-hidden transform scale-95 transition-all mx-4">
+      <div class="bg-slate-950 px-6 py-4 text-white flex items-center justify-between">
+        <h3 class="font-bold text-sm tracking-wide uppercase text-brandYellow" id="userModalTitle">Add New User</h3>
+        <button onclick="closeModal('userModal')" class="text-slate-400 hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <form id="userForm" onsubmit="submitUserForm(event)" class="p-6 space-y-4">
+        <input type="hidden" id="userId">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Name</label>
+          <input type="text" id="userName" required class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brandTurquoise bg-slate-50">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Division</label>
+          <select id="userDivision" required class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brandTurquoise bg-slate-50">
+            <option value="Business Development">Business Development</option>
+            <option value="R&D">R&D</option>
+            <option value="Director">Director</option>
+            <option value="Finance">Finance</option>
+            <option value="Penanggung Jawab Teknis">Penanggung Jawab Teknis</option>
+            <option value="Desain">Desain</option>
+            <option value="Purchasing">Purchasing</option>
+            <option value="Produksi">Produksi</option>
+            <option value="Gudang">Gudang</option>
+            <option value="Management">Management</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Username</label>
+          <input type="text" id="userUsername" required class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brandTurquoise bg-slate-50">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Password</label>
+          <input type="password" id="userPassword" required class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brandTurquoise bg-slate-50">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Role</label>
+          <select id="userRole" required class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brandTurquoise bg-slate-50">
+            <option value="user">User (Standard Access)</option>
+            <option value="admin">Admin (Full Control)</option>
+          </select>
+        </div>
+        <div class="flex items-center justify-end space-x-3 pt-4 border-t border-slate-100">
+          <button type="button" onclick="closeModal('userModal')" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-semibold transition">Cancel</button>
+          <button type="submit" class="px-5 py-2.5 bg-brandTurquoise hover:bg-[#02b1af] text-slate-900 font-bold rounded-xl text-xs transition shadow-md">Save User</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- B. CUSTOMER MODAL -->
+  <div id="customerModal" class="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-4xl overflow-hidden transform scale-95 transition-all max-h-[90vh] flex flex-col mx-4">
+      <div class="bg-slate-950 px-6 py-4 text-white flex items-center justify-between shrink-0">
+        <h3 class="font-bold text-sm tracking-wide uppercase text-brandYellow" id="customerModalTitle">Add New Customer</h3>
+        <button onclick="closeModal('customerModal')" class="text-slate-400 hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      
+      <form id="customerForm" onsubmit="submitCustomerForm(event)" class="overflow-y-auto p-6 md:p-8 flex-1 space-y-6">
+        <input type="hidden" id="custID">
+        
+        <!-- Grid fields -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Customer Name*</label>
+            <input type="text" id="custName" required class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brandTurquoise bg-slate-50" placeholder="John Doe">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Phone Number*</label>
+            <input type="text" id="custPhone" required class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brandTurquoise bg-slate-50" placeholder="+62 81...">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Email Address</label>
+            <input type="email" id="custEmail" class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brandTurquoise bg-slate-50" placeholder="customer@mail.com">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Company Name</label>
+            <input type="text" id="custCompany" class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brandTurquoise bg-slate-50" placeholder="PT. Sainsgo Karya Indonesia">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Brand Name</label>
+            <input type="text" id="custBrand" class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brandTurquoise bg-slate-50" placeholder="NaturePure">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Social Media Account</label>
+            <input type="text" id="custSocial" class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brandTurquoise bg-slate-50" placeholder="@brand_instagram">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Address</label>
+          <textarea id="custAddress" rows="2" class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brandTurquoise bg-slate-50" placeholder="Complete address..."></textarea>
+        </div>
+
+        <!-- Document Upload Link Holders -->
+        <div class="border-t border-slate-200 pt-6 space-y-4">
+          <h4 class="font-extrabold text-slate-900 text-sm mb-3">Upload Required Documents</h4>
+          <p class="text-[11px] text-slate-500 mb-4 italic">Uploading a new file will automatically save it on GDrive and insert its URL below.</p>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Identity Card (KTP)</label>
+              <input type="file" onchange="uploadCustomerDoc(this, 'KTP')" class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-brandTurquoise/15 file:text-slate-900 hover:file:bg-brandTurquoise/35 mb-2">
+              <input type="text" id="custKtpLink" class="w-full px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-mono bg-slate-50" placeholder="KTP GDrive Link">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Tax Number (NPWP)</label>
+              <input type="file" onchange="uploadCustomerDoc(this, 'NPWP')" class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-brandTurquoise/15 file:text-slate-900 hover:file:bg-brandTurquoise/35 mb-2">
+              <input type="text" id="custNpwpLink" class="w-full px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-mono bg-slate-50" placeholder="NPWP GDrive Link">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Business ID (NIB)</label>
+              <input type="file" onchange="uploadCustomerDoc(this, 'NIB')" class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-brandTurquoise/15 file:text-slate-900 hover:file:bg-brandTurquoise/35 mb-2">
+              <input type="text" id="custNibLink" class="w-full px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-mono bg-slate-50" placeholder="NIB GDrive Link">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Brand Trademark (HAKI)</label>
+              <input type="file" onchange="uploadCustomerDoc(this, 'HAKI')" class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-brandTurquoise/15 file:text-slate-900 hover:file:bg-brandTurquoise/35 mb-2">
+              <input type="text" id="custHakiLink" class="w-full px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-mono bg-slate-50" placeholder="HAKI GDrive Link">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">MOU Document</label>
+              <input type="file" onchange="uploadCustomerDoc(this, 'MOU')" class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-brandTurquoise/15 file:text-slate-900 hover:file:bg-brandTurquoise/35 mb-2">
+              <input type="text" id="custMouLink" class="w-full px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-mono bg-slate-50" placeholder="MOU GDrive Link">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">BPOM Certificate</label>
+              <input type="file" onchange="uploadCustomerDoc(this, 'BPOM')" class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-brandTurquoise/15 file:text-slate-900 hover:file:bg-brandTurquoise/35 mb-2">
+              <input type="text" id="custBpomLink" class="w-full px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-mono bg-slate-50" placeholder="BPOM GDrive Link">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Other Miscellaneous Docs</label>
+              <input type="file" onchange="uploadCustomerDoc(this, 'Other Docs')" class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-brandTurquoise/15 file:text-slate-900 hover:file:bg-brandTurquoise/35 mb-2">
+              <input type="text" id="custOtherLink" class="w-full px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-mono bg-slate-50" placeholder="Other Docs GDrive Link">
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Internal Notes</label>
+          <textarea id="custNotes" rows="2" class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brandTurquoise bg-slate-50" placeholder="Notes..."></textarea>
+        </div>
+
+        <div class="flex items-center justify-end space-x-3 pt-6 border-t border-slate-100 shrink-0">
+          <button type="button" onclick="closeModal('customerModal')" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-semibold transition">Cancel</button>
+          <button type="submit" class="px-5 py-2.5 bg-brandTurquoise hover:bg-[#02b1af] text-slate-900 font-bold rounded-xl text-xs transition shadow-md">Save Customer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- C. PROSPECT STATUS MODAL -->
+  <div id="prospectModal" class="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-md overflow-hidden transform scale-95 transition-all mx-4">
+      <div class="bg-slate-950 px-6 py-4 text-white flex items-center justify-between">
+        <h3 class="font-bold text-sm tracking-wide uppercase text-brandYellow" id="prospectModalTitle">Add/Update Prospect Status</h3>
+        <button onclick="closeModal('prospectModal')" class="text-slate-400 hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <form id="prospectForm" onsubmit="submitProspectForm(event)" class="p-6 space-y-4">
+        <input type="hidden" id="prospectId">
+        
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Select Customer</label>
+          <select id="prospectCustomerId" required class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brandTurquoise bg-slate-50">
+            <!-- Dynamic selection -->
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Sales Stage Status</label>
+          <select id="prospectStatus" required class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brandTurquoise bg-slate-50">
+            <option value="Initiate">Initiate</option>
+            <option value="Interest">Interest</option>
+            <option value="Follow Up">Follow Up</option>
+            <option value="Meeting">Meeting</option>
+            <option value="Sampling">Sampling</option>
+            <option value="Request Harga">Request Harga</option>
+            <option value="Order in Process">Order in Process</option>
+            <option value="Finished">Finished</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Prospect Project File</label>
+          <input type="file" onchange="uploadProspectDoc(this)" class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-brandTurquoise/15 file:text-slate-900 hover:file:bg-brandTurquoise/35 mb-2">
+          <input type="text" id="prospectDocUrl" class="w-full px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-mono bg-slate-50" placeholder="Prospect Document URL">
+        </div>
+
+        <div class="flex items-center justify-end space-x-3 pt-4 border-t border-slate-100">
+          <button type="button" onclick="closeModal('prospectModal')" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-semibold transition">Cancel</button>
+          <button type="submit" class="px-5 py-2.5 bg-brandTurquoise hover:bg-[#02b1af] text-slate-900 font-bold rounded-xl text-xs transition shadow-md">Save Prospect</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- D. ADD NEW PROJECT MODAL -->
+  <div id="projectModal" class="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-lg overflow-hidden transform scale-95 transition-all mx-4">
+      <div class="bg-slate-950 px-6 py-4 text-white flex items-center justify-between">
+        <h3 class="font-bold text-sm tracking-wide uppercase text-brandYellow">Add New OEM Project</h3>
+        <button onclick="closeModal('projectModal')" class="text-slate-400 hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <form id="projectForm" onsubmit="submitProjectForm(event)" class="p-6 space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Customer Profile*</label>
+          <select id="projCustomerId" required class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brandTurquoise bg-slate-50">
+            <!-- Dynamic dropdown -->
+          </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Product Category*</label>
+            <select id="projCategory" required class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brandTurquoise bg-slate-50">
+              <option value="Kosmetik">Kosmetik</option>
+              <option value="Pangan">Pangan</option>
+              <option value="Obat Tradisional">Obat Tradisional</option>
+              <option value="PKRT">PKRT</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Product Name</label>
+            <input type="text" id="projProductName" class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brandTurquoise bg-slate-50" placeholder="Product name...">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Quantity (in pcs)</label>
+            <input type="number" id="projQty" min="0" class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brandTurquoise bg-slate-50" placeholder="10000">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Price (per pcs)</label>
+            <input type="number" id="projPrice" min="0" class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brandTurquoise bg-slate-50" placeholder="e.g. 15000">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Packaging Description</label>
+          <textarea id="projPackaging" rows="2" class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brandTurquoise bg-slate-50" placeholder="Description of bottle, jar, sticker, box..."></textarea>
+        </div>
+
+        <div class="flex items-center justify-end space-x-3 pt-4 border-t border-slate-100">
+          <button type="button" onclick="closeModal('projectModal')" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-semibold transition">Cancel</button>
+          <button type="submit" class="px-5 py-2.5 bg-brandTurquoise hover:bg-[#02b1af] text-slate-900 font-bold rounded-xl text-xs transition shadow-md">Launch Project</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- --- FOOTER COMPATIBILITY SCRIPT --- -->
+  <script>
+    // System In-Memory Store
+    let currentUser = null;
+    let globalData = {
+      users: [],
+      customers: [],
+      prospects: [],
+      projects: []
+    };
+    
+    // 12 progress steps checklist data
+    const OEM_STEPS_CONFIG = [
+      { id: 1, name: "BD : Data Konsep Produk & Branding", code: "BD_Concept" },
+      { id: 2, name: "R&D : Perhitungan HPP (Harga Pokok Produksi)", code: "RD_HPP" },
+      { id: 3, name: "Director : Perhitungan Harga Jual", code: "Dir_SellingPrice" },
+      { id: 4, name: "Finance : Invoice Pembayaran DP", code: "Fin_DPInvoice" }, // Step 4 (REVISI 1)
+      { id: 5, name: "Business Development : MoU Contract, Berkas Registrasi", code: "BD_MoU" },
+      { id: 6, name: "Penanggung Jawab Teknis : Registrasi BPOM", code: "PJT_BPOM" },
+      { id: 7, name: "Business Development : Konsep Desain dari Customer", code: "BD_DesignConcept" },
+      { id: 8, name: "Desain : Desain Packaging & Brand", code: "Design_Packaging" },
+      { id: 9, name: "Purchasing : Pembelian Bahan Baku & Kemasan", code: "Pur_Procurement" },
+      { id: 10, name: "Produksi : Bukti Mixing, Filling, Stickering", code: "Prod_Execution" },
+      { id: 11, name: "Finance : Invoice Pelunasan", code: "Fin_FinalInvoice" },
+      { id: 12, name: "Gudang : Pengiriman", code: "Wh_Delivery" }
+    ];
+
+    let selectedProjectID = null;
+
+    // Toggle Sidebar untuk Responsivitas Mobile (REVISI 4)
+    function toggleSidebar() {
+      const sidebar = document.getElementById("sidebarContainer");
+      const overlay = document.getElementById("sidebarOverlay");
+      sidebar.classList.toggle("-translate-x-full");
+      overlay.classList.toggle("hidden");
+    }
+
+    // UI Helper - Toast Notifications
+    function showToast(message, type = "success") {
+      const toast = document.getElementById("toast");
+      const toastIcon = document.getElementById("toastIcon");
+      const toastText = document.getElementById("toastText");
+      
+      toastText.innerText = message;
+      if (type === "success") {
+        toast.className = "fixed top-5 right-5 z-50 transform transition-all duration-300 ease-out flex items-center space-x-3 p-4 rounded-xl shadow-lg max-w-sm bg-brandTurquoise border-2 border-slate-900 text-slate-900 font-bold";
+        toastIcon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+      } else {
+        toast.className = "fixed top-5 right-5 z-50 transform transition-all duration-300 ease-out flex items-center space-x-3 p-4 rounded-xl shadow-lg max-w-sm bg-brandYellow border-2 border-slate-900 text-slate-900 font-bold";
+        toastIcon.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
+      }
+      
+      // Animate In
+      toast.classList.remove("opacity-0", "translate-y-[-100px]");
+      toast.classList.add("opacity-100", "translate-y-0");
+      
+      setTimeout(() => {
+        // Animate Out
+        toast.classList.remove("opacity-100", "translate-y-0");
+        toast.classList.add("opacity-0", "translate-y-[-100px]");
+      }, 4000);
+    }
+
+    // UI Helper - Loading Spinners
+    function showSpinner(show = true, message = "Processing Request...") {
+      const spinner = document.getElementById("globalSpinner");
+      const text = document.getElementById("spinnerMsg");
+      text.innerText = message;
+      if (show) {
+        spinner.classList.remove("hidden");
+      } else {
+        spinner.classList.add("hidden");
+      }
+    }
+
+    // Modal Control Helper
+    function openModal(id) {
+      document.getElementById(id).classList.remove("hidden");
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.add("hidden");
+    }
+
+    // Handle Login
+    function handleLogin(event) {
+      event.preventDefault();
+      const u = document.getElementById("loginUsername").value;
+      const p = document.getElementById("loginPassword").value;
+      
+      showSpinner(true, "Authenticating user...");
+      google.script.run
+        .withSuccessHandler(function(response) {
+          showSpinner(false);
+          if (response.success) {
+            currentUser = response.user;
+            initUserInterface();
+            showToast("Logged in successfully!");
+          } else {
+            showToast(response.message, "error");
+          }
+        })
+        .withFailureHandler(function(err) {
+          showSpinner(false);
+          showToast("Server connection error during login.", "error");
+        })
+        .loginUser(u, p);
+    }
+
+    function handleLogout() {
+      currentUser = null;
+      document.getElementById("mainDashboard").classList.add("hidden");
+      document.getElementById("loginScreen").classList.remove("hidden");
+      document.getElementById("loginForm").reset();
+    }
+
+    // UI Permissions and Views setup
+    function initUserInterface() {
+      document.getElementById("loginScreen").classList.add("hidden");
+      document.getElementById("mainDashboard").classList.remove("hidden");
+      
+      document.getElementById("sessionUserName").innerText = currentUser.name;
+      document.getElementById("sessionUserDivision").innerText = currentUser.division;
+      document.getElementById("sessionUserRole").innerText = currentUser.role;
+
+      // Handle Admin-only modules
+      const adminElements = document.querySelectorAll(".hidden-admin");
+      const userElements = document.querySelectorAll(".hidden-user");
+      
+      if (currentUser.role === "admin") {
+        adminElements.forEach(el => el.classList.remove("hidden"));
+        userElements.forEach(el => el.classList.remove("hidden"));
+      } else {
+        adminElements.forEach(el => el.classList.add("hidden"));
+        userElements.forEach(el => el.classList.add("hidden"));
+      }
+
+      // Fetch fresh sheet data
+      fetchAllData();
+      switchTab('dashboard');
+    }
+
+    // Switch Dashboard Navigation Tabs
+    function switchTab(tabId) {
+      // Hide all panels
+      const panels = document.querySelectorAll(".tab-panel");
+      panels.forEach(p => p.classList.add("hidden"));
+      
+      // Show active
+      document.getElementById(`tab-${tabId}`).classList.remove("hidden");
+      
+      // Update Tab titles (REVISI 3)
+      const titles = {
+        'dashboard': 'Dashboard Summary – PT SAINSGO KI',
+        'projects': 'OEM Project Tracking Matrix – PT SAINSGO KI',
+        'prospects': 'Status Prospect Database – PT SAINSGO KI',
+        'customers': 'Customer Directory – PT SAINSGO KI',
+        'users': 'User Management & Access Control – PT SAINSGO KI'
+      };
+      document.getElementById("currentViewTitle").innerText = titles[tabId] || 'Dashboard';
+
+      // Mark Navigation active class
+      const navButtons = document.querySelectorAll(".nav-btn");
+      navButtons.forEach(btn => {
+        btn.classList.remove("bg-slate-900", "text-white");
+        btn.classList.add("text-slate-400");
+      });
+      document.getElementById(`nav-${tabId}`).classList.add("bg-slate-900", "text-white");
+      document.getElementById(`nav-${tabId}`).classList.remove("text-slate-400");
+
+      // Tutup drawer di mobile jika tab diklik
+      const sidebar = document.getElementById("sidebarContainer");
+      if (!sidebar.classList.contains("-translate-x-full") && window.innerWidth < 768) {
+        toggleSidebar();
+      }
+
+      if (tabId === 'projects') {
+        backToProjectList();
+      }
+    }
+
+    // Load All Spreadsheet Database Tables
+    function fetchAllData() {
+      showSpinner(true, "Synchronizing database tables from Google Sheet...");
+      
+      // Pull Customers
+      google.script.run.withSuccessHandler(function(custRes) {
+        globalData.customers = custRes;
+        renderCustomersTable();
+        populateCustomerDropdowns();
+
+        // Pull Prospects
+        google.script.run.withSuccessHandler(function(prosRes) {
+          globalData.prospects = prosRes;
+          renderProspectsTable();
+
+          // Pull Projects
+          google.script.run.withSuccessHandler(function(projRes) {
+            globalData.projects = projRes;
+            renderProjectsTable();
+            renderDashboardStats();
+            
+            // Reload project detail jika sedang aktif
+            if (selectedProjectID) {
+              viewProjectDetails(selectedProjectID);
+            }
+            
+            // Pull Users if Admin
+            if (currentUser && currentUser.role === "admin") {
+              google.script.run.withSuccessHandler(function(usersRes) {
+                globalData.users = usersRes;
+                renderUsersTable();
+                showSpinner(false);
+              }).getUsers();
+            } else {
+              showSpinner(false);
+            }
+          }).getProjects();
+        }).getProspects();
+      }).getCustomers();
+    }
+
+    // Dashboard calculations
+    function renderDashboardStats() {
+      document.getElementById("statCustomers").innerText = globalData.customers.length;
+      document.getElementById("statProspects").innerText = globalData.prospects.filter(p => p.status !== 'Finished').length;
+      document.getElementById("statProjects").innerText = globalData.projects.length;
+      
+      let avg = 0;
+      if (globalData.projects.length > 0) {
+        const sum = globalData.projects.reduce((acc, p) => acc + (parseFloat(p.overallProgress) || 0), 0);
+        avg = Math.round(sum / globalData.projects.length);
+      }
+      document.getElementById("statAvgProgress").innerText = avg + "%";
+    }
+
+    // CUSTOMER DROPDOWNS POPULATION
+    function populateCustomerDropdowns() {
+      const selectProspect = document.getElementById("prospectCustomerId");
+      const selectProj = document.getElementById("projCustomerId");
+      
+      let optionsHtml = '<option value="">-- Choose Customer --</option>';
+      globalData.customers.forEach(c => {
+        optionsHtml += `<option value="${c.id}" data-name="${c.name}" data-brand="${c.brand}">${c.name} (${c.brand || 'No Brand'})</option>`;
+      });
+      
+      selectProspect.innerHTML = optionsHtml;
+      selectProj.innerHTML = optionsHtml;
+    }
+
+    // --- CUSTOMERS CRUD VIEW IMPLEMENTATION ---
+    function renderCustomersTable() {
+      const tbody = document.getElementById("customersTableBody");
+      tbody.innerHTML = "";
+      
+      if (globalData.customers.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-12 text-center text-slate-400 font-bold">No customers registered yet.</td></tr>`;
+        return;
+      }
+
+      globalData.customers.forEach(c => {
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-slate-50 transition";
+        
+        let fileBadges = "";
+        const files = [
+          { name: 'KTP', url: c.ktpLink },
+          { name: 'NPWP', url: c.npwpLink },
+          { name: 'NIB', url: c.nibLink },
+          { name: 'HAKI', url: c.hakiLink },
+          { name: 'MOU', url: c.mouLink },
+          { name: 'BPOM', url: c.bpomLink },
+          { name: 'Other', url: c.otherLink }
+        ];
+
+        files.forEach(f => {
+          if (f.url && f.url.trim() !== "") {
+            fileBadges += `<a href="${f.url}" target="_blank" class="inline-flex items-center space-x-1 px-2 py-0.5 bg-brandTurquoise/15 hover:bg-brandYellow/30 text-slate-900 text-[10px] font-bold rounded-md border border-brandTurquoise transition" title="Open ${f.name}"><i class="fa-solid fa-file-arrow-up text-[9px]"></i><span>${f.name}</span></a> `;
+          }
+        });
+
+        const actions = currentUser.role === "admin" ? `
+          <div class="flex items-center justify-end space-x-2">
+            <button onclick='editCustomer(${JSON.stringify(c)})' class="p-2 text-slate-800 hover:bg-brandTurquoise/20 rounded-lg transition" title="Edit Customer"><i class="fa-solid fa-pen-to-square"></i></button>
+            <button onclick="confirmDeleteCustomer('${c.id}')" class="p-2 text-rose-600 hover:bg-rose-50 rounded-lg transition" title="Delete Customer"><i class="fa-solid fa-trash-can"></i></button>
+          </div>
+        ` : `<span class="text-xs text-slate-400 font-bold">Read-Only</span>`;
+
+        tr.innerHTML = `
+          <td class="px-6 py-4 font-bold text-xs font-mono text-slate-400">${c.id}</td>
+          <td class="px-6 py-4">
+            <p class="font-extrabold text-slate-900 text-sm">${c.name}</p>
+            <p class="text-xs text-slate-500 mt-1"><i class="fa-solid fa-phone mr-1 text-brandTurquoise"></i> ${c.phone}</p>
+            <p class="text-xs text-slate-500"><i class="fa-solid fa-envelope mr-1 text-brandYellow"></i> ${c.email || 'N/A'}</p>
+          </td>
+          <td class="px-6 py-4">
+            <p class="font-bold text-slate-700">${c.company || 'Individual'}</p>
+            <p class="text-xs text-slate-900 bg-brandYellow/30 border border-brandYellow rounded-full px-2.5 py-0.5 inline-block font-extrabold mt-1 uppercase tracking-wider"><i class="fa-solid fa-tag mr-1"></i> ${c.brand || 'No Brand'}</p>
+          </td>
+          <td class="px-6 py-4 max-w-xs">
+            <p class="text-xs text-slate-500 line-clamp-1">${c.address || 'No Address'}</p>
+            <p class="text-xs text-slate-400 italic mt-1">${c.notes || 'No notes available'}</p>
+          </td>
+          <td class="px-6 py-4"><div class="flex flex-wrap gap-1 max-w-[200px]">${fileBadges || '<span class="text-xs text-slate-400">No uploads</span>'}</div></td>
+          <td class="px-6 py-4 text-right">${actions}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function filterCustomersTable() {
+      const q = document.getElementById("customerSearch").value.toLowerCase();
+      const rows = document.getElementById("customersTableBody").children;
+      for (let r of rows) {
+        const text = r.innerText.toLowerCase();
+        if (text.includes(q)) {
+          r.classList.remove("hidden");
+        } else {
+          r.classList.add("hidden");
+        }
+      }
+    }
+
+    // Ambil detail Customer
+    function openAddCustomerModal() {
+      document.getElementById("customerModalTitle").innerText = "Add New Customer";
+      document.getElementById("customerForm").reset();
+      document.getElementById("custID").value = "";
+      openModal("customerModal");
+    }
+
+    function editCustomer(c) {
+      document.getElementById("customerModalTitle").innerText = "Modify Customer Details";
+      document.getElementById("custID").value = c.id;
+      document.getElementById("custName").value = c.name;
+      document.getElementById("custPhone").value = c.phone;
+      document.getElementById("custEmail").value = c.email;
+      document.getElementById("custCompany").value = c.company;
+      document.getElementById("custBrand").value = c.brand;
+      document.getElementById("custSocial").value = c.socialMedia;
+      document.getElementById("custAddress").value = c.address;
+      document.getElementById("custNotes").value = c.notes;
+      
+      document.getElementById("custKtpLink").value = c.ktpLink || "";
+      document.getElementById("custNpwpLink").value = c.npwpLink || "";
+      document.getElementById("custNibLink").value = c.nibLink || "";
+      document.getElementById("custHakiLink").value = c.hakiLink || "";
+      document.getElementById("custMouLink").value = c.mouLink || "";
+      document.getElementById("custBpomLink").value = c.bpomLink || "";
+      document.getElementById("custOtherLink").value = c.otherLink || "";
+
+      openModal("customerModal");
+    }
+
+    // Handles Customer base64 uploads and sets text value
+    function uploadCustomerDoc(input, docType) {
+      if (!input.files || input.files.length === 0) return;
+      const file = input.files[0];
+      const reader = new FileReader();
+      
+      const custName = document.getElementById("custName").value || "GenericCustomer";
+      const brandName = document.getElementById("custBrand").value || "GenericBrand";
+      
+      // Strict naming pattern format: Nama Customer – Nama Brand – Nama Jenis Dokumen
+      const formattedName = `${custName} - ${brandName} - ${docType}`;
+      
+      showSpinner(true, `Uploading ${docType} to Google Drive...`);
+      
+      reader.onload = function(e) {
+        google.script.run
+          .withSuccessHandler(function(res) {
+            showSpinner(false);
+            if (res.success) {
+              showToast(`${docType} file uploaded successfully!`);
+              // Set corresponding link input field
+              const inputMap = {
+                'KTP': 'custKtpLink',
+                'NPWP': 'custNpwpLink',
+                'NIB': 'custNibLink',
+                'HAKI': 'custHakiLink',
+                'MOU': 'custMouLink',
+                'BPOM': 'custBpomLink',
+                'Other Docs': 'custOtherLink'
+              };
+              document.getElementById(inputMap[docType]).value = res.url;
+            } else {
+              showToast(res.message, "error");
+            }
+          })
+          .withFailureHandler(function(err) {
+            showSpinner(false);
+            showToast("Upload failed.", "error");
+          })
+          .uploadFileToDrive(e.target.result, formattedName);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function submitCustomerForm(event) {
+      event.preventDefault();
+      const customer = {
+        id: document.getElementById("custID").value,
+        name: document.getElementById("custName").value,
+        phone: document.getElementById("custPhone").value,
+        email: document.getElementById("custEmail").value,
+        company: document.getElementById("custCompany").value,
+        brand: document.getElementById("custBrand").value,
+        address: document.getElementById("custAddress").value,
+        socialMedia: document.getElementById("custSocial").value,
+        notes: document.getElementById("custNotes").value,
+        ktpLink: document.getElementById("custKtpLink").value,
+        npwpLink: document.getElementById("custNpwpLink").value,
+        nibLink: document.getElementById("custNibLink").value,
+        hakiLink: document.getElementById("custHakiLink").value,
+        mouLink: document.getElementById("custMouLink").value,
+        bpomLink: document.getElementById("custBpomLink").value,
+        otherLink: document.getElementById("custOtherLink").value
+      };
+
+      showSpinner(true, "Saving customer profile to spreadsheet database...");
+      google.script.run
+        .withSuccessHandler(function(res) {
+          showSpinner(false);
+          if (res.success) {
+            closeModal("customerModal");
+            showToast("Customer profile successfully written to Sheets!");
+            fetchAllData();
+          } else {
+            showToast(res.message, "error");
+          }
+        })
+        .withFailureHandler(function() {
+          showSpinner(false);
+          showToast("Network failure.", "error");
+        })
+        .saveCustomer(customer);
+    }
+
+    function confirmDeleteCustomer(id) {
+      if (confirm("Are you absolutely sure you want to delete this customer? This will permanent remove them from Sheet database.")) {
+        showSpinner(true, "Deleting customer entry...");
+        google.script.run
+          .withSuccessHandler(function(res) {
+            showSpinner(false);
+            if (res.success) {
+              showToast("Customer profile deleted!");
+              fetchAllData();
+            } else {
+              showToast(res.message, "error");
+            }
+          })
+          .deleteCustomer(id);
+      }
+    }
+
+
+    // --- PROSPECTS CRUD VIEW IMPLEMENTATION ---
+    function renderProspectsTable() {
+      const tbody = document.getElementById("prospectsTableBody");
+      tbody.innerHTML = "";
+      
+      if (globalData.prospects.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-12 text-center text-slate-400 font-bold">No prospects registered yet.</td></tr>`;
+        return;
+      }
+
+      const statusColors = {
+        'Initiate': 'bg-slate-100 text-slate-800 border-slate-200',
+        'Interest': 'bg-blue-50 text-blue-700 border-blue-200',
+        'Follow Up': 'bg-brandTurquoise/10 text-slate-900 border-brandTurquoise',
+        'Meeting': 'bg-purple-50 text-purple-700 border-purple-200',
+        'Sampling': 'bg-pink-50 text-pink-700 border-pink-200',
+        'Request Harga': 'bg-brandYellow/20 text-slate-900 border-brandYellow',
+        'Order in Process': 'bg-orange-50 text-orange-700 border-orange-200',
+        'Finished': 'bg-emerald-50 text-emerald-700 border-emerald-200'
+      };
+
+      globalData.prospects.forEach(p => {
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-slate-50 transition";
+        
+        const docHtml = (p.documentLink && p.documentLink.trim() !== "") 
+          ? `<a href="${p.documentLink}" target="_blank" class="inline-flex items-center space-x-1.5 px-3 py-1 bg-brandTurquoise/20 hover:bg-brandTurquoise/40 text-slate-900 font-extrabold rounded-lg text-xs border border-brandTurquoise transition"><i class="fa-solid fa-file-arrow-up text-[11px]"></i><span>View Document</span></a>`
+          : `<span class="text-xs text-slate-400 font-semibold">No Doc Uploaded</span>`;
+
+        const actions = currentUser.role === "admin" ? `
+          <div class="flex items-center justify-end space-x-2">
+            <button onclick='editProspect(${JSON.stringify(p)})' class="p-2 text-slate-800 hover:bg-brandTurquoise/20 rounded-lg transition" title="Modify Prospect"><i class="fa-solid fa-pen-to-square"></i></button>
+            <button onclick="confirmDeleteProspect('${p.id}')" class="p-2 text-rose-600 hover:bg-rose-50 rounded-lg transition" title="Delete Prospect"><i class="fa-solid fa-trash-can"></i></button>
+          </div>
+        ` : `<span class="text-xs text-slate-400 font-bold">Read-Only</span>`;
+
+        const badgeClass = statusColors[p.status] || 'bg-slate-100 text-slate-800 border-slate-200';
+
+        tr.innerHTML = `
+          <td class="px-6 py-4 font-bold text-xs font-mono text-slate-400">${p.id}</td>
+          <td class="px-6 py-4 font-bold text-slate-500 text-xs">${p.date}</td>
+          <td class="px-6 py-4 font-extrabold text-slate-800">${p.customerName}</td>
+          <td class="px-6 py-4">
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-extrabold border ${badgeClass}">
+              ${p.status}
+            </span>
+          </td>
+          <td class="px-6 py-4">${docHtml}</td>
+          <td class="px-6 py-4 text-right">${actions}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function filterProspectsTable() {
+      const q = document.getElementById("prospectSearch").value.toLowerCase();
+      const rows = document.getElementById("prospectsTableBody").children;
+      for (let r of rows) {
+        if (r.innerText.toLowerCase().includes(q)) {
+          r.classList.remove("hidden");
+        } else {
+          r.classList.add("hidden");
+        }
+      }
+    }
+
+    function openAddProspectModal() {
+      document.getElementById("prospectModalTitle").innerText = "Add / Update Prospect Status";
+      document.getElementById("prospectForm").reset();
+      document.getElementById("prospectId").value = "";
+      openModal("prospectModal");
+    }
+
+    function editProspect(p) {
+      document.getElementById("prospectModalTitle").innerText = "Modify Sales Stage Progress";
+      document.getElementById("prospectId").value = p.id;
+      document.getElementById("prospectCustomerId").value = p.customerId;
+      document.getElementById("prospectStatus").value = p.status;
+      document.getElementById("prospectDocUrl").value = p.documentLink || "";
+      openModal("prospectModal");
+    }
+
+    function uploadProspectDoc(input) {
+      if (!input.files || input.files.length === 0) return;
+      const file = input.files[0];
+      const reader = new FileReader();
+      
+      const select = document.getElementById("prospectCustomerId");
+      const selectedOption = select.options[select.selectedIndex];
+      
+      const customerName = selectedOption ? selectedOption.getAttribute("data-name") : "ProspectCustomer";
+      const brandName = selectedOption ? selectedOption.getAttribute("data-brand") : "GenericBrand";
+      
+      // Strict naming pattern format: Nama Customer – Nama Brand – Nama Jenis Dokumen
+      const formattedName = `${customerName} - ${brandName} - Prospect Document`;
+      
+      showSpinner(true, "Uploading prospect documents...");
+      
+      reader.onload = function(e) {
+        google.script.run
+          .withSuccessHandler(function(res) {
+            showSpinner(false);
+            if (res.success) {
+              showToast("Prospect attachment uploaded successfully!");
+              document.getElementById("prospectDocUrl").value = res.url;
+            } else {
+              showToast(res.message, "error");
+            }
+          })
+          .withFailureHandler(function() {
+            showSpinner(false);
+            showToast("Document upload connection failure.", "error");
+          })
+          .uploadFileToDrive(e.target.result, formattedName);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function submitProspectForm(event) {
+      event.preventDefault();
+      const select = document.getElementById("prospectCustomerId");
+      const selectedOption = select.options[select.selectedIndex];
+      
+      if (!selectedOption.value) {
+        showToast("Please choose a valid customer profile first.", "error");
+        return;
+      }
+
+      const prospect = {
+        id: document.getElementById("prospectId").value,
+        customerId: selectedOption.value,
+        customerName: selectedOption.getAttribute("data-name"),
+        status: document.getElementById("prospectStatus").value,
+        documentLink: document.getElementById("prospectDocUrl").value
+      };
+
+      showSpinner(true, "Registering progress state...");
+      google.script.run
+        .withSuccessHandler(function(res) {
+          showSpinner(false);
+          if (res.success) {
+            closeModal("prospectModal");
+            showToast("Prospect status recorded in Sheets!");
+            fetchAllData();
+          } else {
+            showToast(res.message, "error");
+          }
+        })
+        .saveProspect(prospect);
+    }
+
+    // Hitung Jumlah Hari Antara Tanggal Bayar DP dan Hari Ini (REVISI 2)
+    function calculateDaysSince(dateString) {
+      if (!dateString || dateString.trim() === "") return 0;
+      const dpDate = new Date(dateString);
+      const today = new Date();
+      dpDate.setHours(0, 0, 0, 0);
+      today.setHours(0, 0, 0, 0);
+      const diffTime = today - dpDate;
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      return diffDays < 0 ? 0 : diffDays;
+    }
+
+    function confirmDeleteProspect(id) {
+      if (confirm("Are you sure you want to remove this prospect history row?")) {
+        showSpinner(true, "Deleting record...");
+        google.script.run
+          .withSuccessHandler(function(res) {
+            showSpinner(false);
+            if (res.success) {
+              showToast("Record successfully removed.");
+              fetchAllData();
+            } else {
+              showToast(res.message, "error");
+            }
+          })
+          .deleteProspect(id);
+      }
+    }
+
+
+    // --- PROJECTS CRUD & 12 STEPS VIEW IMPLEMENTATION ---
+    function renderProjectsTable() {
+      const tbody = document.getElementById("projectsTableBody");
+      tbody.innerHTML = "";
+      
+      if (globalData.projects.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="px-6 py-12 text-center text-slate-400 font-bold">No projects found. Use the Add New button to create a tracking board.</td></tr>`;
+        return;
+      }
+
+      globalData.projects.forEach(p => {
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-slate-50 transition cursor-pointer";
+        tr.onclick = function(e) {
+          if (e.target.closest('button')) return;
+          viewProjectDetails(p.id);
+        };
+
+        const price = parseFloat(p.price) || 0;
+        const qty = parseInt(p.qty) || 0;
+
+        const progressPercent = parseInt(p.overallProgress) || 0;
+        let progColor = "bg-brandYellow";
+        if (progressPercent >= 100) progColor = "bg-emerald-500";
+        else if (progressPercent >= 50) progColor = "bg-brandTurquoise";
+
+        // Perhitungan hari langsung di baris tabel (REVISI BARU)
+        let durationHtml = "";
+        if (p.dpPaymentDate && p.dpPaymentDate.trim() !== "") {
+          const totalDays = calculateDaysSince(p.dpPaymentDate);
+          durationHtml = `
+            <div class="flex items-center space-x-1.5 text-xs font-bold text-slate-700 bg-brandTurquoise/10 border border-brandTurquoise/35 px-2.5 py-1 rounded-full w-fit">
+              <i class="fa-solid fa-calendar-day text-brandTurquoise text-[11px]"></i>
+              <span>${totalDays} Days</span>
+            </div>
+          `;
+        } else {
+          durationHtml = `
+            <span class="inline-flex items-center text-[10px] text-amber-600 bg-amber-50 px-2 py-0.5 rounded font-extrabold border border-amber-200 italic">
+              Waiting for DP
+            </span>
+          `;
+        }
+
+        const deleteAction = currentUser.role === "admin" ? `
+          <button onclick="confirmDeleteProject('${p.id}')" class="p-2 text-rose-600 hover:bg-rose-50 rounded-lg transition" title="Delete Project"><i class="fa-solid fa-trash-can"></i></button>
+        ` : '';
+
+        tr.innerHTML = `
+          <td class="px-6 py-4 font-extrabold text-xs font-mono text-slate-900">${p.id}</td>
+          <td class="px-6 py-4 font-black text-slate-800">${p.customerName}</td>
+          <td class="px-6 py-4 text-xs font-black uppercase text-slate-900 tracking-wider"><span class="px-2.5 py-1 bg-brandTurquoise/10 rounded-full border border-brandTurquoise">${p.productCategory}</span></td>
+          <td class="px-6 py-4 font-bold text-slate-700">${p.productName || 'N/A'}</td>
+          <td class="px-6 py-4">
+            <p class="font-extrabold text-slate-900 text-xs">${qty.toLocaleString()} pcs</p>
+            <p class="text-[10px] text-slate-500 font-bold mt-0.5">IDR ${price.toLocaleString()}/pcs</p>
+          </td>
+          <td class="px-6 py-4 max-w-xs">
+            <div class="flex items-center space-x-3">
+              <span class="text-xs font-black text-slate-900">${progressPercent}%</span>
+              <div class="w-24 bg-slate-100 h-2 rounded-full overflow-hidden">
+                <div class="${progColor} h-full rounded-full" style="width: ${progressPercent}%"></div>
+              </div>
+            </div>
+          </td>
+          <td class="px-6 py-4">
+            ${durationHtml}
+          </td>
+          <td class="px-6 py-4 text-right">
+            <div class="flex items-center justify-end space-x-1">
+              <button onclick="viewProjectDetails('${p.id}')" class="px-3 py-1.5 bg-brandYellow text-slate-900 font-extrabold rounded-lg text-xs hover:bg-[#e0be09] border border-brandYellow transition flex items-center space-x-1"><span>Track</span><i class="fa-solid fa-chevron-right text-[10px]"></i></button>
+              ${deleteAction}
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Filter pencarian tabel
+    function filterProjectsTable() {
+      const q = document.getElementById("projectSearch").value.toLowerCase();
+      const cat = document.getElementById("projectCategoryFilter").value;
+      const rows = document.getElementById("projectsTableBody").children;
+
+      for (let r of rows) {
+        const text = r.innerText.toLowerCase();
+        const matchesSearch = text.includes(q);
+        const matchesCategory = cat === "" || text.includes(cat.toLowerCase());
+
+        if (matchesSearch && matchesCategory) {
+          r.classList.remove("hidden");
+        } else {
+          r.classList.add("hidden");
+        }
+      }
+    }
+
+    function openAddProjectModal() {
+      document.getElementById("projectForm").reset();
+      openModal("projectModal");
+    }
+
+    function submitProjectForm(event) {
+      event.preventDefault();
+      const select = document.getElementById("projCustomerId");
+      const selectedOption = select.options[select.selectedIndex];
+      
+      if (!selectedOption.value) {
+        showToast("Please choose a valid customer profile first.", "error");
+        return;
+      }
+
+      const project = {
+        customerId: selectedOption.value,
+        customerName: selectedOption.getAttribute("data-name"),
+        productCategory: document.getElementById("projCategory").value,
+        productName: document.getElementById("projProductName").value,
+        qty: document.getElementById("projQty").value,
+        price: document.getElementById("projPrice").value,
+        packagingDescription: document.getElementById("projPackaging").value
+      };
+
+      showSpinner(true, "Launching new project trackers into Sheet...");
+      google.script.run
+        .withSuccessHandler(function(res) {
+          showSpinner(false);
+          if (res.success) {
+            closeModal("projectModal");
+            showToast("New tracking project initialized!");
+            fetchAllData();
+          } else {
+            showToast(res.message, "error");
+          }
+        })
+        .saveProject(project);
+    }
+
+    function confirmDeleteProject(id) {
+      if (confirm("Warning: Deleting this project will remove all related tracking steps in sheets. Continue?")) {
+        showSpinner(true, "Deleting Project...");
+        google.script.run
+          .withSuccessHandler(function(res) {
+            showSpinner(false);
+            if (res.success) {
+              showToast("OEM Project tracking data removed!");
+              fetchAllData();
+            } else {
+              showToast(res.message, "error");
+            }
+          })
+          .deleteProject(id);
+      }
+    }
+
+    // --- DETAILED VIEW FOR 12-STEPS OEM PROJECT ---
+    function viewProjectDetails(id) {
+      const project = globalData.projects.find(p => p.id === id);
+      if (!project) return;
+      
+      selectedProjectID = id;
+
+      // Update basic fields
+      document.getElementById("detailProductName").innerText = project.productName || "Unnamed OEM Product";
+      document.getElementById("detailProductCategory").innerText = project.productCategory;
+      document.getElementById("detailCustomerName").innerText = project.customerName;
+      document.getElementById("detailProjectId").innerText = project.id;
+      
+      const qty = parseInt(project.qty) || 0;
+      const price = parseFloat(project.price) || 0;
+      document.getElementById("detailQty").innerText = qty.toLocaleString() + " pcs";
+      document.getElementById("detailPrice").innerText = "IDR " + price.toLocaleString();
+      document.getElementById("detailTotalValue").innerText = "IDR " + (qty * price).toLocaleString();
+      document.getElementById("detailPackaging").innerText = project.packagingDescription || "No packaging description available.";
+
+      // Update Duration (REVISI 2)
+      if (project.dpPaymentDate && project.dpPaymentDate.trim() !== "") {
+        const totalDays = calculateDaysSince(project.dpPaymentDate);
+        document.getElementById("detailProjectDurationDays").innerText = totalDays + " Days";
+        document.getElementById("detailProjectDurationLabel").innerHTML = `Started on: <span class="font-bold text-slate-800">${project.dpPaymentDate}</span>`;
+        document.getElementById("detailProjectDurationContainer").className = "flex items-center space-x-3 bg-white p-4 rounded-2xl border-2 border-brandTurquoise min-w-[200px]";
+      } else {
+        document.getElementById("detailProjectDurationDays").innerText = "Pending";
+        document.getElementById("detailProjectDurationLabel").innerText = "Waiting for DP in Stage 4";
+        document.getElementById("detailProjectDurationContainer").className = "flex items-center space-x-3 bg-white p-4 rounded-2xl border-2 border-brandYellow min-w-[200px]";
+      }
+
+      // Update Overall Progress % at the top of the detail sheet
+      updateDetailProgressVisuals(project.overallProgress);
+
+      // Render 12 Individual Steps cards
+      renderProjectStepsList(project);
+
+      // Animation switch view
+      document.getElementById("projectMainSection").classList.add("hidden");
+      document.getElementById("projectDetailSection").classList.remove("hidden");
+    }
+
+    function backToProjectList() {
+      document.getElementById("projectDetailSection").classList.add("hidden");
+      document.getElementById("projectMainSection").classList.remove("hidden");
+      selectedProjectID = null;
+    }
+
+    function updateDetailProgressVisuals(progressVal) {
+      const pPercent = parseInt(progressVal) || 0;
+      document.getElementById("detailProgressPercent").innerText = pPercent + "%";
+      document.getElementById("detailProgressBar").style.width = pPercent + "%";
+      
+      let desc = "Initiating steps...";
+      if (pPercent === 100) desc = "OEM Project Completed!";
+      else if (pPercent >= 75) desc = "Finalization stages...";
+      else if (pPercent >= 40) desc = "Operational production & registration...";
+      else if (pPercent >= 15) desc = "Design and formulation stages...";
+      
+      document.getElementById("detailProgressDesc").innerText = desc;
+    }
+
+    // RENDER THE 12-STEP COMPREHENSIVE CARD MATRIX
+    function renderProjectStepsList(project) {
+      const container = document.getElementById("stagesContainer");
+      container.innerHTML = "";
+
+      OEM_STEPS_CONFIG.forEach((step, idx) => {
+        // Find saved step status and document link URL
+        const stepState = project.steps[idx] || { status: "Pending", url: "" };
+        const isCompleted = stepState.status === "Completed";
+        
+        const card = document.createElement("div");
+        card.className = `p-5 rounded-2xl border-2 transition-all duration-300 flex flex-col justify-between ${isCompleted ? 'bg-brandTurquoise/10 border-brandTurquoise' : 'bg-white border-slate-200'}`;
+        
+        // Link template
+        const fileBtnHtml = (stepState.url && stepState.url.trim() !== "")
+          ? `<a href="${stepState.url}" target="_blank" class="flex-1 inline-flex items-center justify-center space-x-1.5 py-2 bg-brandTurquoise text-slate-900 font-bold rounded-xl text-xs border border-brandTurquoise hover:bg-[#02b1af] transition"><i class="fa-solid fa-file-arrow-up text-xs"></i><span>View Doc</span></a>`
+          : `<span class="flex-1 text-center py-2 text-slate-400 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold">No File Link</span>`;
+
+        // Kolom Tambahan Khusus untuk Input Tanggal DP di Stage 4 (REVISI 1)
+        let customStepFields = "";
+        if (idx === 3) { // Stage 4: Finance : Invoice Pembayaran DP
+          customStepFields = `
+            <div class="mt-4 pt-3 border-t border-slate-200">
+              <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Tanggal Pembayaran DP Customer:</label>
+              <div class="relative">
+                <input type="date" id="dpPaymentDateVal" onchange="saveDpPaymentDate('${project.id}', this.value)" value="${project.dpPaymentDate || ''}" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs font-bold focus:outline-none focus:border-brandTurquoise bg-slate-50 text-slate-800">
+              </div>
+            </div>
+          `;
+        }
+
+        card.innerHTML = `
+          <div>
+            <div class="flex items-start justify-between gap-4 mb-4">
+              <div class="space-y-1">
+                <span class="text-[9px] font-extrabold uppercase bg-slate-950 text-brandYellow px-2 py-0.5 rounded tracking-widest border border-slate-800">Stage ${step.id}</span>
+                <h4 class="font-extrabold text-slate-900 text-sm leading-snug">${step.name}</h4>
+              </div>
+              
+              <!-- Checkbox Switch -->
+              <label class="relative inline-flex items-center cursor-pointer select-none shrink-0">
+                <input type="checkbox" onchange="toggleStepStatus('${project.id}', ${idx}, this)" ${isCompleted ? 'checked' : ''} class="sr-only peer">
+                <div class="w-11 h-6 bg-slate-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brandTurquoise"></div>
+              </label>
+            </div>
+
+            <div class="space-y-2 mb-4">
+              <div class="flex items-center space-x-2">
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Status:</span>
+                <span class="text-xs font-extrabold ${isCompleted ? 'text-brandTurquoise bg-slate-950/10 px-2 py-0.5 rounded border border-brandTurquoise/35' : 'text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-200'}" id="status-text-${idx}">${stepState.status}</span>
+              </div>
+              ${customStepFields}
+            </div>
+          </div>
+
+          <!-- Upload Box and View Doc Button -->
+          <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
+            <div class="flex-1 relative overflow-hidden">
+              <button class="w-full flex items-center justify-center space-x-1.5 py-2 bg-brandYellow hover:bg-[#e0be09] text-slate-900 font-extrabold rounded-xl text-xs transition border border-brandYellow">
+                <i class="fa-solid fa-cloud-arrow-up text-xs"></i>
+                <span>Upload File</span>
+              </button>
+              <input type="file" onchange="uploadStepDoc('${project.id}', ${idx}, this)" class="absolute inset-0 opacity-0 cursor-pointer">
+            </div>
+            <div id="step-doclink-${idx}" class="flex-1 flex">
+              ${fileBtnHtml}
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Toggle step state
+    function toggleStepStatus(projId, stepIndex, checkbox) {
+      const isChecked = checkbox.checked;
+      const status = isChecked ? "Completed" : "Pending";
+      
+      const project = globalData.projects.find(p => p.id === projId);
+      const docUrl = project.steps[stepIndex] ? project.steps[stepIndex].url : "";
+      
+      showSpinner(true, `Updating step status to ${status}...`);
+      google.script.run
+        .withSuccessHandler(function(res) {
+          showSpinner(false);
+          if (res.success) {
+            showToast("Stage checklist status updated!");
+            
+            // Local memory update
+            project.steps[stepIndex].status = status;
+            project.overallProgress = res.progressPercent;
+            
+            // Visual text update
+            const textEl = document.getElementById(`status-text-${stepIndex}`);
+            textEl.innerText = status;
+            if (status === "Completed") {
+              textEl.className = "text-xs font-extrabold text-brandTurquoise bg-slate-950/10 px-2 py-0.5 rounded border border-brandTurquoise/35";
+            } else {
+              textEl.className = "text-xs font-extrabold text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-200";
+            }
+            
+            updateDetailProgressVisuals(res.progressPercent);
+            renderDashboardStats();
+          } else {
+            checkbox.checked = !isChecked;
+            showToast(res.message, "error");
+          }
+        })
+        .withFailureHandler(function() {
+          showSpinner(false);
+          checkbox.checked = !isChecked;
+          showToast("Failed to save changes to Sheet.", "error");
+        })
+        .updateProjectStep(projId, stepIndex, status, docUrl);
+    }
+
+    // Handles Menyimpan Tanggal Pembayaran DP ke Backend (REVISI 1)
+    function saveDpPaymentDate(projId, dateValue) {
+      if (!dateValue) return;
+      showSpinner(true, "Menyimpan Tanggal Pembayaran DP...");
+      google.script.run
+        .withSuccessHandler(function(res) {
+          showSpinner(false);
+          if (res.success) {
+            showToast("Tanggal Pembayaran DP Berhasil Disimpan!");
+            // Update data di memori
+            const project = globalData.projects.find(p => p.id === projId);
+            if (project) {
+              project.dpPaymentDate = dateValue;
+              // Re-render detail untuk memperbarui hitungan hari (REVISI 2)
+              viewProjectDetails(projId);
+            }
+          } else {
+            showToast(res.message, "error");
+          }
+        })
+        .withFailureHandler(function() {
+          showSpinner(false);
+          showToast("Gagal menyimpan tanggal ke Google Sheet.", "error");
+        })
+        .updateProjectDpDate(projId, dateValue);
+    }
+
+    // Handles uploading document for a specific step of the active Project
+    function uploadStepDoc(projId, stepIndex, input) {
+      if (!input.files || input.files.length === 0) return;
+      const file = input.files[0];
+      const reader = new FileReader();
+      
+      const project = globalData.projects.find(p => p.id === projId);
+      
+      // Fetch Customer details to obtain brand
+      const customer = globalData.customers.find(c => c.id === project.customerId) || { name: project.customerName, brand: "" };
+      
+      // Step details
+      const stepName = OEM_STEPS_CONFIG[stepIndex].name;
+      
+      // Format: Nama Customer – Nama Brand – Nama Produk - Nama Jenis Dokumen
+      const customerName = project.customerName || "Customer";
+      const brandName = customer.brand || "Brand";
+      const productName = project.productName || "Product";
+      
+      const formattedFileName = `${customerName} - ${brandName} - ${productName} - ${stepName}`;
+      
+      showSpinner(true, `Uploading document to Google Drive...`);
+      
+      reader.onload = function(e) {
+        google.script.run
+          .withSuccessHandler(function(res) {
+            showSpinner(false);
+            if (res.success) {
+              showToast("OEM step document successfully saved in Google Drive!");
+              
+              // Update GDrive URL locally & remotely
+              project.steps[stepIndex].url = res.url;
+              
+              // Automatically mark status as Completed when file is uploaded
+              const currentStatus = "Completed";
+              project.steps[stepIndex].status = currentStatus;
+              
+              google.script.run
+                .withSuccessHandler(function(projRes) {
+                  project.overallProgress = projRes.progressPercent;
+                  updateDetailProgressVisuals(projRes.progressPercent);
+                  
+                  // Re-render project detail steps to display updated values
+                  viewProjectDetails(projId);
+                  renderDashboardStats();
+                })
+                .updateProjectStep(projId, stepIndex, currentStatus, res.url);
+            } else {
+              showToast(res.message, "error");
+            }
+          })
+          .withFailureHandler(function() {
+            showSpinner(false);
+            showToast("Network upload error.", "error");
+          })
+          .uploadFileToDrive(e.target.result, formattedFileName);
+      };
+      reader.readAsDataURL(file);
+    }
+
+
+    // --- USERS CRUD VIEW IMPLEMENTATION (ADMIN ONLY) ---
+    function renderUsersTable() {
+      const tbody = document.getElementById("usersTableBody");
+      tbody.innerHTML = "";
+      
+      globalData.users.forEach(u => {
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-slate-50 transition";
+        
+        tr.innerHTML = `
+          <td class="px-6 py-4 font-bold text-xs font-mono text-slate-400">${u.id}</td>
+          <td class="px-6 py-4 font-extrabold text-slate-800">${u.name}</td>
+          <td class="px-6 py-4 font-bold text-slate-500 text-xs">${u.division}</td>
+          <td class="px-6 py-4 font-semibold text-slate-600">${u.username}</td>
+          <td class="px-6 py-4">
+            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${u.role === 'admin' ? 'bg-brandTurquoise/20 text-slate-900 border border-brandTurquoise' : 'bg-slate-100 text-slate-800 border border-slate-200'}">
+              ${u.role}
+            </span>
+          </td>
+          <td class="px-6 py-4 text-right">
+            <div class="flex items-center justify-end space-x-2">
+              <button onclick='editUser(${JSON.stringify(u)})' class="p-2 text-slate-800 hover:bg-brandTurquoise/20 rounded-lg transition" title="Modify User"><i class="fa-solid fa-pen-to-square"></i></button>
+              <button onclick="confirmDeleteUser('${u.id}')" class="p-2 text-rose-600 hover:bg-rose-50 rounded-lg transition" title="Delete User" ${u.username === 'admin' ? 'disabled class="opacity-30 cursor-not-allowed"' : ''}><i class="fa-solid fa-trash-can"></i></button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function openAddUserModal() {
+      document.getElementById("userModalTitle").innerText = "Register New System User";
+      document.getElementById("userForm").reset();
+      document.getElementById("userId").value = "";
+      openModal("userModal");
+    }
+
+    function editUser(u) {
+      document.getElementById("userModalTitle").innerText = "Modify System User";
+      document.getElementById("userId").value = u.id;
+      document.getElementById("userName").value = u.name;
+      document.getElementById("userDivision").value = u.division;
+      document.getElementById("userUsername").value = u.username;
+      document.getElementById("userPassword").value = ""; // Don't expose password
+      document.getElementById("userRole").value = u.role;
+      openModal("userModal");
+    }
+
+    function submitUserForm(event) {
+      event.preventDefault();
+      const user = {
+        id: document.getElementById("userId").value,
+        name: document.getElementById("userName").value,
+        division: document.getElementById("userDivision").value,
+        username: document.getElementById("userUsername").value,
+        password: document.getElementById("userPassword").value,
+        role: document.getElementById("userRole").value
+      };
+
+      showSpinner(true, "Synchronizing credentials database...");
+      google.script.run
+        .withSuccessHandler(function(res) {
+          showSpinner(false);
+          if (res.success) {
+            closeModal("userModal");
+            showToast("System user database row modified!");
+            fetchAllData();
+          } else {
+            showToast(res.message, "error");
+          }
+        })
+        .saveUser(user);
+    }
+
+    function confirmDeleteUser(id) {
+      if (confirm("Permanently delete this user access row?")) {
+        showSpinner(true, "Deleting user...");
+        google.script.run
+          .withSuccessHandler(function(res) {
+            showSpinner(false);
+            if (res.success) {
+              showToast("System user credentials row successfully deleted!");
+              fetchAllData();
+            } else {
+              showToast(res.message, "error");
+            }
+          })
+          .deleteUser(id);
+      }
+    }
+  </script>
+</body>
+</html>
