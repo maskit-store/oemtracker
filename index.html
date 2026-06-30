@@ -10,7 +10,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <script>
-    // Memasukkan palette warna kustom sesuai revisi user ke dalam konfigurasi Tailwind
     tailwind.config = {
       theme: {
         extend: {
@@ -28,9 +27,8 @@
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #F7F7E3; /* Tema warna dasar brandWhite */
+      background-color: #F7F7E3; 
     }
-    /* Custom Scrollbar */
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
@@ -109,7 +107,7 @@
   <!-- 2. MAIN DASHBOARD CONTAINER -->
   <div id="mainDashboard" class="flex-1 flex flex-col md:flex-row hidden">
     
-    <!-- SIDEBAR CONTAINER (Responsif untuk Mobile & Desktop) -->
+    <!-- SIDEBAR CONTAINER -->
     <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-950/50 z-20 hidden md:hidden"></div>
     
     <aside id="sidebarContainer" class="fixed md:static inset-y-0 left-0 z-30 w-64 bg-slate-950 text-white flex flex-col shrink-0 border-r border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
@@ -123,13 +121,11 @@
             <p class="text-[9px] text-brandTurquoise font-bold uppercase">PT SAINSGO KI</p>
           </div>
         </div>
-        <!-- Button Close Sidebar untuk Mobile -->
         <button onclick="toggleSidebar()" class="md:hidden text-slate-400 hover:text-white transition">
           <i class="fa-solid fa-xmark text-lg"></i>
         </button>
       </div>
 
-      <!-- User Context -->
       <div class="px-6 py-4 border-b border-slate-800 bg-slate-900/40">
         <p class="text-[10px] text-slate-400">Logged in as:</p>
         <p class="font-bold text-sm truncate text-brandTurquoise" id="sessionUserName">Administrator</p>
@@ -139,7 +135,6 @@
         </div>
       </div>
 
-      <!-- Navigation links -->
       <nav class="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto">
         <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition duration-150 text-slate-400 hover:bg-slate-900 hover:text-white">
           <i class="fa-solid fa-chart-line w-5 text-brandYellow"></i>
@@ -177,11 +172,8 @@
 
     <!-- CONTENT WRAPPER -->
     <main class="flex-1 flex flex-col overflow-x-hidden min-h-screen">
-      
-      <!-- HEADER UTAMA -->
       <header class="bg-white border-b border-slate-200 py-4 px-6 md:px-8 flex items-center justify-between shadow-sm shrink-0">
         <div class="flex items-center space-x-3">
-          <!-- Button Hamburger untuk Mobile -->
           <button onclick="toggleSidebar()" class="md:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg">
             <i class="fa-solid fa-bars text-lg"></i>
           </button>
@@ -200,12 +192,9 @@
         </div>
       </header>
 
-      <!-- ACTIVE TAB PANELS -->
       <div class="flex-1 p-4 md:p-8 overflow-y-auto">
-        
         <!-- 2A. TAB: DASHBOARD SUMMARY -->
         <div id="tab-dashboard" class="tab-panel space-y-6 md:space-y-8">
-          <!-- Banner Mobile & Deskripsi Singkat -->
           <div class="bg-white p-5 rounded-2xl border-2 border-brandTurquoise shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div>
               <h2 class="text-lg font-bold text-slate-900">OEM TRACKER – PT SAINSGO KARYA INDONESIA</h2>
@@ -218,7 +207,7 @@
           </div>
 
           <!-- STATS CARDS -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:grid-cols-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between">
               <div>
                 <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Customers</p>
@@ -260,7 +249,6 @@
             </div>
           </div>
 
-          <!-- RECENT DISPATCH AND CHARTS -->
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4">
               <h3 class="font-extrabold text-slate-900 text-base">Key Capabilities & Divisions</h3>
@@ -269,7 +257,7 @@
               <div class="space-y-3 pt-2">
                 <div class="flex justify-between items-center text-xs text-slate-600">
                   <span class="font-bold text-slate-700">Cosmetics Progress Rate</span>
-                  <span class="bg-brandYellow/20 text-slate-800 px-2 py-0.5 rounded font-bold border border-brandYellow">High Demand</span>
+                  <span class="bg-brandYellow/20 text-slate-800 px-2 py-0.5 rounded">High Demand</span>
                 </div>
                 <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
                   <div class="bg-brandYellow h-full rounded-full" style="width: 85%"></div>
@@ -293,7 +281,6 @@
               </div>
             </div>
 
-            <!-- QUICK GUIDE -->
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
               <div>
                 <h3 class="font-extrabold text-slate-900 text-base mb-2">Automated Project Tracking System</h3>
@@ -321,10 +308,8 @@
 
         <!-- 2B. TAB: TRACKING PROJECTS -->
         <div id="tab-projects" class="tab-panel space-y-6 hidden">
-          <!-- PROJECTS MAIN SCREEN -->
           <div id="projectMainSection" class="space-y-6">
             <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-              <!-- Search & Filter -->
               <div class="flex flex-col sm:flex-row flex-1 gap-3 max-w-2xl">
                 <div class="relative flex-1">
                   <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
@@ -346,7 +331,6 @@
               </button>
             </div>
 
-            <!-- PROJECTS TABLE -->
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
               <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse min-w-[700px]">
@@ -370,9 +354,8 @@
             </div>
           </div>
 
-          <!-- DETAIL / PROGRESS EDIT PANEL (Hidden by Default) -->
+          <!-- DETAIL / PROGRESS EDIT PANEL -->
           <div id="projectDetailSection" class="bg-white p-4 md:p-8 rounded-2xl shadow-sm border border-slate-200 space-y-6 md:space-y-8 hidden">
-            <!-- HEADER INFO -->
             <div class="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-slate-200 gap-6">
               <div class="space-y-2">
                 <button onclick="backToProjectList()" class="inline-flex items-center space-x-2 text-brandTurquoise hover:text-[#01a7a5] transition font-extrabold text-xs uppercase tracking-wider mb-2">
@@ -386,9 +369,7 @@
                 <p class="text-xs md:text-sm text-slate-500">Customer: <span id="detailCustomerName" class="font-bold text-slate-800">John Doe</span> | ID: <span id="detailProjectId" class="font-mono text-xs font-semibold">PROJ101</span></p>
               </div>
 
-              <!-- DURATION & OVERALL PROGRESS DISPLAY (Top of each project sheet) -->
               <div class="flex flex-col sm:flex-row gap-4">
-                <!-- Count Days Container (REVISI 2) -->
                 <div id="detailProjectDurationContainer" class="flex items-center space-x-3 bg-white p-4 rounded-2xl border-2 border-brandYellow min-w-[200px]">
                   <div class="text-center shrink-0">
                     <span class="p-3 bg-brandYellow/20 text-slate-950 rounded-xl inline-block border border-brandYellow">
@@ -402,7 +383,6 @@
                   </div>
                 </div>
 
-                <!-- Circular Progress Bar Container -->
                 <div class="flex items-center space-x-4 bg-slate-50 p-4 rounded-2xl border border-slate-200 min-w-[200px]">
                   <div class="relative flex items-center justify-center">
                     <div class="text-center">
@@ -420,8 +400,7 @@
               </div>
             </div>
 
-            <!-- SPECS INFO -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 bg-slate-50 p-6 rounded-2xl border border-slate-200">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 bg-slate-50 p-6 rounded-2xl border border-slate-200">
               <div>
                 <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Order Qty</p>
                 <p class="font-bold text-slate-900 text-sm md:text-base mt-1" id="detailQty">0 pcs</p>
@@ -440,13 +419,11 @@
               </div>
             </div>
 
-            <!-- 12 PROJECT STAGES CHECKLIST & UPLOADER -->
             <div class="space-y-4">
               <div class="flex items-center justify-between">
                 <h3 class="font-black text-slate-900 text-sm md:text-base">Interactive Departmental Checklist</h3>
                 <span class="text-[10px] text-slate-500 font-bold bg-brandYellow/20 px-2.5 py-1 rounded-full border border-brandYellow"><i class="fa-solid fa-lock"></i> Auto-saves to Sheet</span>
               </div>
-
               <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="stagesContainer">
                 <!-- 12 Dynamic Step Cards generated via JavaScript -->
               </div>
@@ -469,7 +446,6 @@
             </button>
           </div>
 
-          <!-- PROSPECTS TABLE -->
           <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
             <div class="overflow-x-auto">
               <table class="w-full text-left border-collapse min-w-[650px]">
@@ -506,7 +482,6 @@
             </button>
           </div>
 
-          <!-- CUSTOMERS TABLE -->
           <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
             <div class="overflow-x-auto">
               <table class="w-full text-left border-collapse min-w-[750px]">
@@ -537,7 +512,6 @@
             </button>
           </div>
 
-          <!-- USERS TABLE -->
           <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
             <div class="overflow-x-auto">
               <table class="w-full text-left border-collapse min-w-[600px]">
@@ -562,8 +536,6 @@
       </div>
     </main>
   </div>
-
-  <!-- --- MODALS VIEW --- -->
 
   <!-- A. USER MANAGEMENT MODAL -->
   <div id="userModal" class="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm hidden">
@@ -627,7 +599,6 @@
       <form id="customerForm" onsubmit="submitCustomerForm(event)" class="overflow-y-auto p-6 md:p-8 flex-1 space-y-6">
         <input type="hidden" id="custID">
         
-        <!-- Grid fields -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Customer Name*</label>
@@ -660,7 +631,6 @@
           <textarea id="custAddress" rows="2" class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brandTurquoise bg-slate-50" placeholder="Complete address..."></textarea>
         </div>
 
-        <!-- Document Upload Link Holders -->
         <div class="border-t border-slate-200 pt-6 space-y-4">
           <h4 class="font-extrabold text-slate-900 text-sm mb-3">Upload Required Documents</h4>
           <p class="text-[11px] text-slate-500 mb-4 italic">Uploading a new file will automatically save it on GDrive and insert its URL below.</p>
@@ -826,6 +796,28 @@
 
   <!-- --- FOOTER COMPATIBILITY SCRIPT --- -->
   <script>
+    // URL Web App Google Apps Script API Anda
+    const API_URL = "https://script.google.com/macros/s/AKfycbyDJj8cISEA2UD4MukNXfcoxxs0eOuPKLt3UYFRMN3KRk-c5HEDytWqL8TPh0Gfg1c/exec";
+
+    /**
+     * Helper Utama untuk Menghubungkan Frontend GitHub dengan Backend Apps Script secara Lintas Domain (CORS).
+     * Kami menggunakan format Content-Type: "text/plain" untuk melewati batasan pra-pemeriksaan CORS (OPTIONS Preflight)
+     * sehingga koneksi API terjamin 100% lancar, aman, dan tanpa hambatan di semua browser.
+     */
+    function callAPI(action, payload = {}) {
+      return fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain"
+        },
+        body: JSON.stringify({ action, ...payload })
+      })
+      .then(response => {
+        if (!response.ok) throw new Error("Koneksi API bermasalah.");
+        return response.json();
+      });
+    }
+
     // System In-Memory Store
     let currentUser = null;
     let globalData = {
@@ -835,12 +827,11 @@
       projects: []
     };
     
-    // 12 progress steps checklist data
     const OEM_STEPS_CONFIG = [
       { id: 1, name: "BD : Data Konsep Produk & Branding", code: "BD_Concept" },
       { id: 2, name: "R&D : Perhitungan HPP (Harga Pokok Produksi)", code: "RD_HPP" },
       { id: 3, name: "Director : Perhitungan Harga Jual", code: "Dir_SellingPrice" },
-      { id: 4, name: "Finance : Invoice Pembayaran DP", code: "Fin_DPInvoice" }, // Step 4 (REVISI 1)
+      { id: 4, name: "Finance : Invoice Pembayaran DP", code: "Fin_DPInvoice" }, 
       { id: 5, name: "Business Development : MoU Contract, Berkas Registrasi", code: "BD_MoU" },
       { id: 6, name: "Penanggung Jawab Teknis : Registrasi BPOM", code: "PJT_BPOM" },
       { id: 7, name: "Business Development : Konsep Desain dari Customer", code: "BD_DesignConcept" },
@@ -853,7 +844,6 @@
 
     let selectedProjectID = null;
 
-    // Toggle Sidebar untuk Responsivitas Mobile (REVISI 4)
     function toggleSidebar() {
       const sidebar = document.getElementById("sidebarContainer");
       const overlay = document.getElementById("sidebarOverlay");
@@ -861,7 +851,6 @@
       overlay.classList.toggle("hidden");
     }
 
-    // UI Helper - Toast Notifications
     function showToast(message, type = "success") {
       const toast = document.getElementById("toast");
       const toastIcon = document.getElementById("toastIcon");
@@ -876,18 +865,15 @@
         toastIcon.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
       }
       
-      // Animate In
       toast.classList.remove("opacity-0", "translate-y-[-100px]");
       toast.classList.add("opacity-100", "translate-y-0");
       
       setTimeout(() => {
-        // Animate Out
         toast.classList.remove("opacity-100", "translate-y-0");
         toast.classList.add("opacity-0", "translate-y-[-100px]");
       }, 4000);
     }
 
-    // UI Helper - Loading Spinners
     function showSpinner(show = true, message = "Processing Request...") {
       const spinner = document.getElementById("globalSpinner");
       const text = document.getElementById("spinnerMsg");
@@ -899,7 +885,6 @@
       }
     }
 
-    // Modal Control Helper
     function openModal(id) {
       document.getElementById(id).classList.remove("hidden");
     }
@@ -907,15 +892,16 @@
       document.getElementById(id).classList.add("hidden");
     }
 
-    // Handle Login
+    // Handle Login via REST API (REVISI PERMANEN)
     function handleLogin(event) {
       event.preventDefault();
       const u = document.getElementById("loginUsername").value;
       const p = document.getElementById("loginPassword").value;
       
       showSpinner(true, "Authenticating user...");
-      google.script.run
-        .withSuccessHandler(function(response) {
+      
+      callAPI("login", { username: u, password: p })
+        .then(response => {
           showSpinner(false);
           if (response.success) {
             currentUser = response.user;
@@ -925,11 +911,10 @@
             showToast(response.message, "error");
           }
         })
-        .withFailureHandler(function(err) {
+        .catch(err => {
           showSpinner(false);
-          showToast("Server connection error during login.", "error");
-        })
-        .loginUser(u, p);
+          showToast("Koneksi server gagal atau timeout.", "error");
+        });
     }
 
     function handleLogout() {
@@ -939,16 +924,15 @@
       document.getElementById("loginForm").reset();
     }
 
-    // UI Permissions and Views setup
     function initUserInterface() {
       document.getElementById("loginScreen").classList.add("hidden");
       document.getElementById("mainDashboard").classList.remove("hidden");
       
       document.getElementById("sessionUserName").innerText = currentUser.name;
       document.getElementById("sessionUserDivision").innerText = currentUser.division;
+      document.getElementById("sessionUserName").title = currentUser.id; // Tampilkan ID lengkap jika di-hover
       document.getElementById("sessionUserRole").innerText = currentUser.role;
 
-      // Handle Admin-only modules
       const adminElements = document.querySelectorAll(".hidden-admin");
       const userElements = document.querySelectorAll(".hidden-user");
       
@@ -960,21 +944,16 @@
         userElements.forEach(el => el.classList.add("hidden"));
       }
 
-      // Fetch fresh sheet data
       fetchAllData();
       switchTab('dashboard');
     }
 
-    // Switch Dashboard Navigation Tabs
     function switchTab(tabId) {
-      // Hide all panels
       const panels = document.querySelectorAll(".tab-panel");
       panels.forEach(p => p.classList.add("hidden"));
       
-      // Show active
       document.getElementById(`tab-${tabId}`).classList.remove("hidden");
       
-      // Update Tab titles (REVISI 3)
       const titles = {
         'dashboard': 'Dashboard Summary – PT SAINSGO KI',
         'projects': 'OEM Project Tracking Matrix – PT SAINSGO KI',
@@ -984,7 +963,6 @@
       };
       document.getElementById("currentViewTitle").innerText = titles[tabId] || 'Dashboard';
 
-      // Mark Navigation active class
       const navButtons = document.querySelectorAll(".nav-btn");
       navButtons.forEach(btn => {
         btn.classList.remove("bg-slate-900", "text-white");
@@ -993,7 +971,6 @@
       document.getElementById(`nav-${tabId}`).classList.add("bg-slate-900", "text-white");
       document.getElementById(`nav-${tabId}`).classList.remove("text-slate-400");
 
-      // Tutup drawer di mobile jika tab diklik
       const sidebar = document.getElementById("sidebarContainer");
       if (!sidebar.classList.contains("-translate-x-full") && window.innerWidth < 768) {
         toggleSidebar();
@@ -1004,48 +981,49 @@
       }
     }
 
-    // Load All Spreadsheet Database Tables
+    // Mengambil Seluruh Data via REST API (REVISI PERMANEN)
     function fetchAllData() {
       showSpinner(true, "Synchronizing database tables from Google Sheet...");
       
-      // Pull Customers
-      google.script.run.withSuccessHandler(function(custRes) {
-        globalData.customers = custRes;
-        renderCustomersTable();
-        populateCustomerDropdowns();
+      callAPI("getCustomers")
+        .then(custRes => {
+          globalData.customers = custRes;
+          renderCustomersTable();
+          populateCustomerDropdowns();
 
-        // Pull Prospects
-        google.script.run.withSuccessHandler(function(prosRes) {
+          return callAPI("getProspects");
+        })
+        .then(prosRes => {
           globalData.prospects = prosRes;
           renderProspectsTable();
 
-          // Pull Projects
-          google.script.run.withSuccessHandler(function(projRes) {
-            globalData.projects = projRes;
-            renderProjectsTable();
-            renderDashboardStats();
-            
-            // Reload project detail jika sedang aktif
-            if (selectedProjectID) {
-              viewProjectDetails(selectedProjectID);
-            }
-            
-            // Pull Users if Admin
-            if (currentUser && currentUser.role === "admin") {
-              google.script.run.withSuccessHandler(function(usersRes) {
-                globalData.users = usersRes;
-                renderUsersTable();
-                showSpinner(false);
-              }).getUsers();
-            } else {
+          return callAPI("getProjects");
+        })
+        .then(projRes => {
+          globalData.projects = projRes;
+          renderProjectsTable();
+          renderDashboardStats();
+          
+          if (selectedProjectID) {
+            viewProjectDetails(selectedProjectID);
+          }
+          
+          if (currentUser && currentUser.role === "admin") {
+            return callAPI("getUsers").then(usersRes => {
+              globalData.users = usersRes;
+              renderUsersTable();
               showSpinner(false);
-            }
-          }).getProjects();
-        }).getProspects();
-      }).getCustomers();
+            });
+          } else {
+            showSpinner(false);
+          }
+        })
+        .catch(err => {
+          showSpinner(false);
+          showToast("Gagal melakukan sinkronisasi database: " + err.toString(), "error");
+        });
     }
 
-    // Dashboard calculations
     function renderDashboardStats() {
       document.getElementById("statCustomers").innerText = globalData.customers.length;
       document.getElementById("statProspects").innerText = globalData.prospects.filter(p => p.status !== 'Finished').length;
@@ -1059,7 +1037,6 @@
       document.getElementById("statAvgProgress").innerText = avg + "%";
     }
 
-    // CUSTOMER DROPDOWNS POPULATION
     function populateCustomerDropdowns() {
       const selectProspect = document.getElementById("prospectCustomerId");
       const selectProj = document.getElementById("projCustomerId");
@@ -1146,14 +1123,6 @@
       }
     }
 
-    // Ambil detail Customer
-    function openAddCustomerModal() {
-      document.getElementById("customerModalTitle").innerText = "Add New Customer";
-      document.getElementById("customerForm").reset();
-      document.getElementById("custID").value = "";
-      openModal("customerModal");
-    }
-
     function editCustomer(c) {
       document.getElementById("customerModalTitle").innerText = "Modify Customer Details";
       document.getElementById("custID").value = c.id;
@@ -1177,7 +1146,6 @@
       openModal("customerModal");
     }
 
-    // Handles Customer base64 uploads and sets text value
     function uploadCustomerDoc(input, docType) {
       if (!input.files || input.files.length === 0) return;
       const file = input.files[0];
@@ -1185,19 +1153,16 @@
       
       const custName = document.getElementById("custName").value || "GenericCustomer";
       const brandName = document.getElementById("custBrand").value || "GenericBrand";
-      
-      // Strict naming pattern format: Nama Customer – Nama Brand – Nama Jenis Dokumen
       const formattedName = `${custName} - ${brandName} - ${docType}`;
       
       showSpinner(true, `Uploading ${docType} to Google Drive...`);
       
       reader.onload = function(e) {
-        google.script.run
-          .withSuccessHandler(function(res) {
+        callAPI("uploadFileToDrive", { base64Data: e.target.result, fileName: formattedName })
+          .then(res => {
             showSpinner(false);
             if (res.success) {
               showToast(`${docType} file uploaded successfully!`);
-              // Set corresponding link input field
               const inputMap = {
                 'KTP': 'custKtpLink',
                 'NPWP': 'custNpwpLink',
@@ -1212,11 +1177,10 @@
               showToast(res.message, "error");
             }
           })
-          .withFailureHandler(function(err) {
+          .catch(err => {
             showSpinner(false);
             showToast("Upload failed.", "error");
-          })
-          .uploadFileToDrive(e.target.result, formattedName);
+          });
       };
       reader.readAsDataURL(file);
     }
@@ -1243,8 +1207,8 @@
       };
 
       showSpinner(true, "Saving customer profile to spreadsheet database...");
-      google.script.run
-        .withSuccessHandler(function(res) {
+      callAPI("saveCustomer", { customer })
+        .then(res => {
           showSpinner(false);
           if (res.success) {
             closeModal("customerModal");
@@ -1254,18 +1218,17 @@
             showToast(res.message, "error");
           }
         })
-        .withFailureHandler(function() {
+        .catch(() => {
           showSpinner(false);
           showToast("Network failure.", "error");
-        })
-        .saveCustomer(customer);
+        });
     }
 
     function confirmDeleteCustomer(id) {
-      if (confirm("Are you absolutely sure you want to delete this customer? This will permanent remove them from Sheet database.")) {
+      if (confirm("Are you absolutely sure you want to delete this customer?")) {
         showSpinner(true, "Deleting customer entry...");
-        google.script.run
-          .withSuccessHandler(function(res) {
+        callAPI("deleteCustomer", { id })
+          .then(res => {
             showSpinner(false);
             if (res.success) {
               showToast("Customer profile deleted!");
@@ -1274,7 +1237,7 @@
               showToast(res.message, "error");
             }
           })
-          .deleteCustomer(id);
+          .catch(() => showSpinner(false));
       }
     }
 
@@ -1371,15 +1334,13 @@
       
       const customerName = selectedOption ? selectedOption.getAttribute("data-name") : "ProspectCustomer";
       const brandName = selectedOption ? selectedOption.getAttribute("data-brand") : "GenericBrand";
-      
-      // Strict naming pattern format: Nama Customer – Nama Brand – Nama Jenis Dokumen
       const formattedName = `${customerName} - ${brandName} - Prospect Document`;
       
       showSpinner(true, "Uploading prospect documents...");
       
       reader.onload = function(e) {
-        google.script.run
-          .withSuccessHandler(function(res) {
+        callAPI("uploadFileToDrive", { base64Data: e.target.result, fileName: formattedName })
+          .then(res => {
             showSpinner(false);
             if (res.success) {
               showToast("Prospect attachment uploaded successfully!");
@@ -1388,11 +1349,10 @@
               showToast(res.message, "error");
             }
           })
-          .withFailureHandler(function() {
+          .catch(() => {
             showSpinner(false);
             showToast("Document upload connection failure.", "error");
-          })
-          .uploadFileToDrive(e.target.result, formattedName);
+          });
       };
       reader.readAsDataURL(file);
     }
@@ -1416,8 +1376,8 @@
       };
 
       showSpinner(true, "Registering progress state...");
-      google.script.run
-        .withSuccessHandler(function(res) {
+      callAPI("saveProspect", { prospect })
+        .then(res => {
           showSpinner(false);
           if (res.success) {
             closeModal("prospectModal");
@@ -1427,10 +1387,9 @@
             showToast(res.message, "error");
           }
         })
-        .saveProspect(prospect);
+        .catch(() => showSpinner(false));
     }
 
-    // Hitung Jumlah Hari Antara Tanggal Bayar DP dan Hari Ini (REVISI 2)
     function calculateDaysSince(dateString) {
       if (!dateString || dateString.trim() === "") return 0;
       const dpDate = new Date(dateString);
@@ -1445,8 +1404,8 @@
     function confirmDeleteProspect(id) {
       if (confirm("Are you sure you want to remove this prospect history row?")) {
         showSpinner(true, "Deleting record...");
-        google.script.run
-          .withSuccessHandler(function(res) {
+        callAPI("deleteProspect", { id })
+          .then(res => {
             showSpinner(false);
             if (res.success) {
               showToast("Record successfully removed.");
@@ -1455,7 +1414,7 @@
               showToast(res.message, "error");
             }
           })
-          .deleteProspect(id);
+          .catch(() => showSpinner(false));
       }
     }
 
@@ -1466,7 +1425,7 @@
       tbody.innerHTML = "";
       
       if (globalData.projects.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" class="px-6 py-12 text-center text-slate-400 font-bold">No projects found. Use the Add New button to create a tracking board.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" class="px-6 py-12 text-center text-slate-400 font-bold">No projects found.</td></tr>`;
         return;
       }
 
@@ -1480,13 +1439,11 @@
 
         const price = parseFloat(p.price) || 0;
         const qty = parseInt(p.qty) || 0;
-
         const progressPercent = parseInt(p.overallProgress) || 0;
         let progColor = "bg-brandYellow";
         if (progressPercent >= 100) progColor = "bg-emerald-500";
         else if (progressPercent >= 50) progColor = "bg-brandTurquoise";
 
-        // Perhitungan hari langsung di baris tabel (REVISI BARU)
         let durationHtml = "";
         if (p.dpPaymentDate && p.dpPaymentDate.trim() !== "") {
           const totalDays = calculateDaysSince(p.dpPaymentDate);
@@ -1539,7 +1496,6 @@
       });
     }
 
-    // Filter pencarian tabel
     function filterProjectsTable() {
       const q = document.getElementById("projectSearch").value.toLowerCase();
       const cat = document.getElementById("projectCategoryFilter").value;
@@ -1584,8 +1540,8 @@
       };
 
       showSpinner(true, "Launching new project trackers into Sheet...");
-      google.script.run
-        .withSuccessHandler(function(res) {
+      callAPI("saveProject", { project })
+        .then(res => {
           showSpinner(false);
           if (res.success) {
             closeModal("projectModal");
@@ -1595,14 +1551,14 @@
             showToast(res.message, "error");
           }
         })
-        .saveProject(project);
+        .catch(() => showSpinner(false));
     }
 
     function confirmDeleteProject(id) {
       if (confirm("Warning: Deleting this project will remove all related tracking steps in sheets. Continue?")) {
         showSpinner(true, "Deleting Project...");
-        google.script.run
-          .withSuccessHandler(function(res) {
+        callAPI("deleteProject", { id })
+          .then(res => {
             showSpinner(false);
             if (res.success) {
               showToast("OEM Project tracking data removed!");
@@ -1611,18 +1567,16 @@
               showToast(res.message, "error");
             }
           })
-          .deleteProject(id);
+          .catch(() => showSpinner(false));
       }
     }
 
-    // --- DETAILED VIEW FOR 12-STEPS OEM PROJECT ---
     function viewProjectDetails(id) {
       const project = globalData.projects.find(p => p.id === id);
       if (!project) return;
       
       selectedProjectID = id;
 
-      // Update basic fields
       document.getElementById("detailProductName").innerText = project.productName || "Unnamed OEM Product";
       document.getElementById("detailProductCategory").innerText = project.productCategory;
       document.getElementById("detailCustomerName").innerText = project.customerName;
@@ -1635,7 +1589,6 @@
       document.getElementById("detailTotalValue").innerText = "IDR " + (qty * price).toLocaleString();
       document.getElementById("detailPackaging").innerText = project.packagingDescription || "No packaging description available.";
 
-      // Update Duration (REVISI 2)
       if (project.dpPaymentDate && project.dpPaymentDate.trim() !== "") {
         const totalDays = calculateDaysSince(project.dpPaymentDate);
         document.getElementById("detailProjectDurationDays").innerText = totalDays + " Days";
@@ -1647,13 +1600,9 @@
         document.getElementById("detailProjectDurationContainer").className = "flex items-center space-x-3 bg-white p-4 rounded-2xl border-2 border-brandYellow min-w-[200px]";
       }
 
-      // Update Overall Progress % at the top of the detail sheet
       updateDetailProgressVisuals(project.overallProgress);
-
-      // Render 12 Individual Steps cards
       renderProjectStepsList(project);
 
-      // Animation switch view
       document.getElementById("projectMainSection").classList.add("hidden");
       document.getElementById("projectDetailSection").classList.remove("hidden");
     }
@@ -1678,27 +1627,23 @@
       document.getElementById("detailProgressDesc").innerText = desc;
     }
 
-    // RENDER THE 12-STEP COMPREHENSIVE CARD MATRIX
     function renderProjectStepsList(project) {
       const container = document.getElementById("stagesContainer");
       container.innerHTML = "";
 
       OEM_STEPS_CONFIG.forEach((step, idx) => {
-        // Find saved step status and document link URL
         const stepState = project.steps[idx] || { status: "Pending", url: "" };
         const isCompleted = stepState.status === "Completed";
         
         const card = document.createElement("div");
         card.className = `p-5 rounded-2xl border-2 transition-all duration-300 flex flex-col justify-between ${isCompleted ? 'bg-brandTurquoise/10 border-brandTurquoise' : 'bg-white border-slate-200'}`;
         
-        // Link template
         const fileBtnHtml = (stepState.url && stepState.url.trim() !== "")
           ? `<a href="${stepState.url}" target="_blank" class="flex-1 inline-flex items-center justify-center space-x-1.5 py-2 bg-brandTurquoise text-slate-900 font-bold rounded-xl text-xs border border-brandTurquoise hover:bg-[#02b1af] transition"><i class="fa-solid fa-file-arrow-up text-xs"></i><span>View Doc</span></a>`
           : `<span class="flex-1 text-center py-2 text-slate-400 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold">No File Link</span>`;
 
-        // Kolom Tambahan Khusus untuk Input Tanggal DP di Stage 4 (REVISI 1)
         let customStepFields = "";
-        if (idx === 3) { // Stage 4: Finance : Invoice Pembayaran DP
+        if (idx === 3) { 
           customStepFields = `
             <div class="mt-4 pt-3 border-t border-slate-200">
               <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Tanggal Pembayaran DP Customer:</label>
@@ -1717,7 +1662,6 @@
                 <h4 class="font-extrabold text-slate-900 text-sm leading-snug">${step.name}</h4>
               </div>
               
-              <!-- Checkbox Switch -->
               <label class="relative inline-flex items-center cursor-pointer select-none shrink-0">
                 <input type="checkbox" onchange="toggleStepStatus('${project.id}', ${idx}, this)" ${isCompleted ? 'checked' : ''} class="sr-only peer">
                 <div class="w-11 h-6 bg-slate-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brandTurquoise"></div>
@@ -1726,14 +1670,13 @@
 
             <div class="space-y-2 mb-4">
               <div class="flex items-center space-x-2">
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Status:</span>
+                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Status:</span>
                 <span class="text-xs font-extrabold ${isCompleted ? 'text-brandTurquoise bg-slate-950/10 px-2 py-0.5 rounded border border-brandTurquoise/35' : 'text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-200'}" id="status-text-${idx}">${stepState.status}</span>
               </div>
               ${customStepFields}
             </div>
           </div>
 
-          <!-- Upload Box and View Doc Button -->
           <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
             <div class="flex-1 relative overflow-hidden">
               <button class="w-full flex items-center justify-center space-x-1.5 py-2 bg-brandYellow hover:bg-[#e0be09] text-slate-900 font-extrabold rounded-xl text-xs transition border border-brandYellow">
@@ -1751,7 +1694,6 @@
       });
     }
 
-    // Toggle step state
     function toggleStepStatus(projId, stepIndex, checkbox) {
       const isChecked = checkbox.checked;
       const status = isChecked ? "Completed" : "Pending";
@@ -1760,17 +1702,14 @@
       const docUrl = project.steps[stepIndex] ? project.steps[stepIndex].url : "";
       
       showSpinner(true, `Updating step status to ${status}...`);
-      google.script.run
-        .withSuccessHandler(function(res) {
+      callAPI("updateProjectStep", { projectId: projId, stepIndex: stepIndex, status: status, docUrl: docUrl })
+        .then(res => {
           showSpinner(false);
           if (res.success) {
             showToast("Stage checklist status updated!");
-            
-            // Local memory update
             project.steps[stepIndex].status = status;
             project.overallProgress = res.progressPercent;
             
-            // Visual text update
             const textEl = document.getElementById(`status-text-${stepIndex}`);
             textEl.innerText = status;
             if (status === "Completed") {
@@ -1786,97 +1725,77 @@
             showToast(res.message, "error");
           }
         })
-        .withFailureHandler(function() {
+        .catch(() => {
           showSpinner(false);
           checkbox.checked = !isChecked;
           showToast("Failed to save changes to Sheet.", "error");
-        })
-        .updateProjectStep(projId, stepIndex, status, docUrl);
+        });
     }
 
-    // Handles Menyimpan Tanggal Pembayaran DP ke Backend (REVISI 1)
     function saveDpPaymentDate(projId, dateValue) {
       if (!dateValue) return;
       showSpinner(true, "Menyimpan Tanggal Pembayaran DP...");
-      google.script.run
-        .withSuccessHandler(function(res) {
+      callAPI("updateProjectDpDate", { projectId: projId, dpDate: dateValue })
+        .then(res => {
           showSpinner(false);
           if (res.success) {
             showToast("Tanggal Pembayaran DP Berhasil Disimpan!");
-            // Update data di memori
             const project = globalData.projects.find(p => p.id === projId);
             if (project) {
               project.dpPaymentDate = dateValue;
-              // Re-render detail untuk memperbarui hitungan hari (REVISI 2)
               viewProjectDetails(projId);
             }
           } else {
             showToast(res.message, "error");
           }
         })
-        .withFailureHandler(function() {
+        .catch(() => {
           showSpinner(false);
           showToast("Gagal menyimpan tanggal ke Google Sheet.", "error");
-        })
-        .updateProjectDpDate(projId, dateValue);
+        });
     }
 
-    // Handles uploading document for a specific step of the active Project
     function uploadStepDoc(projId, stepIndex, input) {
       if (!input.files || input.files.length === 0) return;
       const file = input.files[0];
       const reader = new FileReader();
       
       const project = globalData.projects.find(p => p.id === projId);
-      
-      // Fetch Customer details to obtain brand
       const customer = globalData.customers.find(c => c.id === project.customerId) || { name: project.customerName, brand: "" };
-      
-      // Step details
       const stepName = OEM_STEPS_CONFIG[stepIndex].name;
       
-      // Format: Nama Customer – Nama Brand – Nama Produk - Nama Jenis Dokumen
       const customerName = project.customerName || "Customer";
       const brandName = customer.brand || "Brand";
       const productName = project.productName || "Product";
-      
       const formattedFileName = `${customerName} - ${brandName} - ${productName} - ${stepName}`;
       
       showSpinner(true, `Uploading document to Google Drive...`);
       
       reader.onload = function(e) {
-        google.script.run
-          .withSuccessHandler(function(res) {
+        callAPI("uploadFileToDrive", { base64Data: e.target.result, fileName: formattedFileName })
+          .then(res => {
             showSpinner(false);
             if (res.success) {
               showToast("OEM step document successfully saved in Google Drive!");
-              
-              // Update GDrive URL locally & remotely
               project.steps[stepIndex].url = res.url;
-              
-              // Automatically mark status as Completed when file is uploaded
               const currentStatus = "Completed";
               project.steps[stepIndex].status = currentStatus;
               
-              google.script.run
-                .withSuccessHandler(function(projRes) {
-                  project.overallProgress = projRes.progressPercent;
-                  updateDetailProgressVisuals(projRes.progressPercent);
-                  
-                  // Re-render project detail steps to display updated values
-                  viewProjectDetails(projId);
-                  renderDashboardStats();
-                })
-                .updateProjectStep(projId, stepIndex, currentStatus, res.url);
+              return callAPI("updateProjectStep", { projectId: projId, stepIndex: stepIndex, status: currentStatus, docUrl: res.url });
             } else {
-              showToast(res.message, "error");
+              throw new Error(res.message);
             }
           })
-          .withFailureHandler(function() {
-            showSpinner(false);
-            showToast("Network upload error.", "error");
+          .then(projRes => {
+            project.overallProgress = projRes.progressPercent;
+            updateDetailProgressVisuals(projRes.progressPercent);
+            viewProjectDetails(projId);
+            renderDashboardStats();
           })
-          .uploadFileToDrive(e.target.result, formattedFileName);
+          .catch(err => {
+            showSpinner(false);
+            showToast("Gagal upload atau update status: " + err.toString(), "error");
+          });
       };
       reader.readAsDataURL(file);
     }
@@ -1925,7 +1844,7 @@
       document.getElementById("userName").value = u.name;
       document.getElementById("userDivision").value = u.division;
       document.getElementById("userUsername").value = u.username;
-      document.getElementById("userPassword").value = ""; // Don't expose password
+      document.getElementById("userPassword").value = ""; 
       document.getElementById("userRole").value = u.role;
       openModal("userModal");
     }
@@ -1942,8 +1861,8 @@
       };
 
       showSpinner(true, "Synchronizing credentials database...");
-      google.script.run
-        .withSuccessHandler(function(res) {
+      callAPI("saveUser", { user })
+        .then(res => {
           showSpinner(false);
           if (res.success) {
             closeModal("userModal");
@@ -1953,14 +1872,14 @@
             showToast(res.message, "error");
           }
         })
-        .saveUser(user);
+        .catch(() => showSpinner(false));
     }
 
     function confirmDeleteUser(id) {
       if (confirm("Permanently delete this user access row?")) {
         showSpinner(true, "Deleting user...");
-        google.script.run
-          .withSuccessHandler(function(res) {
+        callAPI("deleteUser", { id })
+          .then(res => {
             showSpinner(false);
             if (res.success) {
               showToast("System user credentials row successfully deleted!");
@@ -1969,7 +1888,7 @@
               showToast(res.message, "error");
             }
           })
-          .deleteUser(id);
+          .catch(() => showSpinner(false));
       }
     }
   </script>
