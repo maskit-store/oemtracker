@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <script>
+    // Memasukkan palette warna kustom sesuai revisi user ke dalam konfigurasi Tailwind
     tailwind.config = {
       theme: {
         extend: {
@@ -27,8 +28,9 @@
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #F7F7E3; 
+      background-color: #F7F7E3; /* Tema warna dasar brandWhite */
     }
+    /* Custom Scrollbar */
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
@@ -107,7 +109,7 @@
   <!-- 2. MAIN DASHBOARD CONTAINER -->
   <div id="mainDashboard" class="flex-1 flex flex-col md:flex-row hidden">
     
-    <!-- SIDEBAR CONTAINER -->
+    <!-- SIDEBAR CONTAINER (Responsif untuk Mobile & Desktop) -->
     <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-950/50 z-20 hidden md:hidden"></div>
     
     <aside id="sidebarContainer" class="fixed md:static inset-y-0 left-0 z-30 w-64 bg-slate-950 text-white flex flex-col shrink-0 border-r border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
@@ -121,11 +123,13 @@
             <p class="text-[9px] text-brandTurquoise font-bold uppercase">PT SAINSGO KI</p>
           </div>
         </div>
+        <!-- Button Close Sidebar untuk Mobile -->
         <button onclick="toggleSidebar()" class="md:hidden text-slate-400 hover:text-white transition">
           <i class="fa-solid fa-xmark text-lg"></i>
         </button>
       </div>
 
+      <!-- User Context -->
       <div class="px-6 py-4 border-b border-slate-800 bg-slate-900/40">
         <p class="text-[10px] text-slate-400">Logged in as:</p>
         <p class="font-bold text-sm truncate text-brandTurquoise" id="sessionUserName">Administrator</p>
@@ -135,6 +139,7 @@
         </div>
       </div>
 
+      <!-- Navigation links -->
       <nav class="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto">
         <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition duration-150 text-slate-400 hover:bg-slate-900 hover:text-white">
           <i class="fa-solid fa-chart-line w-5 text-brandYellow"></i>
@@ -172,8 +177,11 @@
 
     <!-- CONTENT WRAPPER -->
     <main class="flex-1 flex flex-col overflow-x-hidden min-h-screen">
+      
+      <!-- HEADER UTAMA -->
       <header class="bg-white border-b border-slate-200 py-4 px-6 md:px-8 flex items-center justify-between shadow-sm shrink-0">
         <div class="flex items-center space-x-3">
+          <!-- Button Hamburger untuk Mobile -->
           <button onclick="toggleSidebar()" class="md:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg">
             <i class="fa-solid fa-bars text-lg"></i>
           </button>
@@ -192,9 +200,12 @@
         </div>
       </header>
 
+      <!-- ACTIVE TAB PANELS -->
       <div class="flex-1 p-4 md:p-8 overflow-y-auto">
+        
         <!-- 2A. TAB: DASHBOARD SUMMARY -->
         <div id="tab-dashboard" class="tab-panel space-y-6 md:space-y-8">
+          <!-- Banner Mobile & Deskripsi Singkat -->
           <div class="bg-white p-5 rounded-2xl border-2 border-brandTurquoise shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div>
               <h2 class="text-lg font-bold text-slate-900">OEM TRACKER – PT SAINSGO KARYA INDONESIA</h2>
@@ -249,6 +260,7 @@
             </div>
           </div>
 
+          <!-- RECENT DISPATCH AND CHARTS -->
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4">
               <h3 class="font-extrabold text-slate-900 text-base">Key Capabilities & Divisions</h3>
@@ -257,7 +269,7 @@
               <div class="space-y-3 pt-2">
                 <div class="flex justify-between items-center text-xs text-slate-600">
                   <span class="font-bold text-slate-700">Cosmetics Progress Rate</span>
-                  <span class="bg-brandYellow/20 text-slate-800 px-2 py-0.5 rounded">High Demand</span>
+                  <span class="bg-brandYellow/20 text-slate-800 px-2 py-0.5 rounded font-bold border border-brandYellow">High Demand</span>
                 </div>
                 <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
                   <div class="bg-brandYellow h-full rounded-full" style="width: 85%"></div>
@@ -281,6 +293,7 @@
               </div>
             </div>
 
+            <!-- QUICK GUIDE -->
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
               <div>
                 <h3 class="font-extrabold text-slate-900 text-base mb-2">Automated Project Tracking System</h3>
@@ -308,8 +321,10 @@
 
         <!-- 2B. TAB: TRACKING PROJECTS -->
         <div id="tab-projects" class="tab-panel space-y-6 hidden">
+          <!-- PROJECTS MAIN SCREEN -->
           <div id="projectMainSection" class="space-y-6">
             <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+              <!-- Search & Filter -->
               <div class="flex flex-col sm:flex-row flex-1 gap-3 max-w-2xl">
                 <div class="relative flex-1">
                   <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
@@ -331,6 +346,7 @@
               </button>
             </div>
 
+            <!-- PROJECTS TABLE -->
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
               <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse min-w-[700px]">
@@ -354,8 +370,9 @@
             </div>
           </div>
 
-          <!-- DETAIL / PROGRESS EDIT PANEL -->
+          <!-- DETAIL / PROGRESS EDIT PANEL (Hidden by Default) -->
           <div id="projectDetailSection" class="bg-white p-4 md:p-8 rounded-2xl shadow-sm border border-slate-200 space-y-6 md:space-y-8 hidden">
+            <!-- HEADER INFO -->
             <div class="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-slate-200 gap-6">
               <div class="space-y-2">
                 <button onclick="backToProjectList()" class="inline-flex items-center space-x-2 text-brandTurquoise hover:text-[#01a7a5] transition font-extrabold text-xs uppercase tracking-wider mb-2">
@@ -369,7 +386,9 @@
                 <p class="text-xs md:text-sm text-slate-500">Customer: <span id="detailCustomerName" class="font-bold text-slate-800">John Doe</span> | ID: <span id="detailProjectId" class="font-mono text-xs font-semibold">PROJ101</span></p>
               </div>
 
+              <!-- DURATION & OVERALL PROGRESS DISPLAY (Top of each project sheet) -->
               <div class="flex flex-col sm:flex-row gap-4">
+                <!-- Count Days Container -->
                 <div id="detailProjectDurationContainer" class="flex items-center space-x-3 bg-white p-4 rounded-2xl border-2 border-brandYellow min-w-[200px]">
                   <div class="text-center shrink-0">
                     <span class="p-3 bg-brandYellow/20 text-slate-950 rounded-xl inline-block border border-brandYellow">
@@ -383,6 +402,7 @@
                   </div>
                 </div>
 
+                <!-- Circular Progress Bar Container -->
                 <div class="flex items-center space-x-4 bg-slate-50 p-4 rounded-2xl border border-slate-200 min-w-[200px]">
                   <div class="relative flex items-center justify-center">
                     <div class="text-center">
@@ -400,7 +420,8 @@
               </div>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 bg-slate-50 p-6 rounded-2xl border border-slate-200">
+            <!-- SPECS INFO -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 bg-slate-50 p-6 rounded-2xl border border-slate-200">
               <div>
                 <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Order Qty</p>
                 <p class="font-bold text-slate-900 text-sm md:text-base mt-1" id="detailQty">0 pcs</p>
@@ -419,11 +440,13 @@
               </div>
             </div>
 
+            <!-- 12 PROJECT STAGES CHECKLIST & UPLOADER -->
             <div class="space-y-4">
               <div class="flex items-center justify-between">
                 <h3 class="font-black text-slate-900 text-sm md:text-base">Interactive Departmental Checklist</h3>
                 <span class="text-[10px] text-slate-500 font-bold bg-brandYellow/20 px-2.5 py-1 rounded-full border border-brandYellow"><i class="fa-solid fa-lock"></i> Auto-saves to Sheet</span>
               </div>
+
               <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="stagesContainer">
                 <!-- 12 Dynamic Step Cards generated via JavaScript -->
               </div>
@@ -446,6 +469,7 @@
             </button>
           </div>
 
+          <!-- PROSPECTS TABLE -->
           <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
             <div class="overflow-x-auto">
               <table class="w-full text-left border-collapse min-w-[650px]">
@@ -482,6 +506,7 @@
             </button>
           </div>
 
+          <!-- CUSTOMERS TABLE -->
           <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
             <div class="overflow-x-auto">
               <table class="w-full text-left border-collapse min-w-[750px]">
@@ -512,6 +537,7 @@
             </button>
           </div>
 
+          <!-- USERS TABLE -->
           <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
             <div class="overflow-x-auto">
               <table class="w-full text-left border-collapse min-w-[600px]">
@@ -536,6 +562,8 @@
       </div>
     </main>
   </div>
+
+  <!-- --- MODALS VIEW --- -->
 
   <!-- A. USER MANAGEMENT MODAL -->
   <div id="userModal" class="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm hidden">
@@ -599,6 +627,7 @@
       <form id="customerForm" onsubmit="submitCustomerForm(event)" class="overflow-y-auto p-6 md:p-8 flex-1 space-y-6">
         <input type="hidden" id="custID">
         
+        <!-- Grid fields -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label class="block text-xs font-bold text-slate-700 uppercase mb-2">Customer Name*</label>
@@ -631,6 +660,7 @@
           <textarea id="custAddress" rows="2" class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brandTurquoise bg-slate-50" placeholder="Complete address..."></textarea>
         </div>
 
+        <!-- Document Upload Link Holders -->
         <div class="border-t border-slate-200 pt-6 space-y-4">
           <h4 class="font-extrabold text-slate-900 text-sm mb-3">Upload Required Documents</h4>
           <p class="text-[11px] text-slate-500 mb-4 italic">Uploading a new file will automatically save it on GDrive and insert its URL below.</p>
@@ -892,7 +922,7 @@
       document.getElementById(id).classList.add("hidden");
     }
 
-    // Handle Login via REST API (REVISI PERMANEN)
+    // Handle Login via REST API
     function handleLogin(event) {
       event.preventDefault();
       const u = document.getElementById("loginUsername").value;
@@ -981,7 +1011,7 @@
       }
     }
 
-    // Mengambil Seluruh Data via REST API (REVISI PERMANEN)
+    // Mengambil Seluruh Data via REST API
     function fetchAllData() {
       showSpinner(true, "Synchronizing database tables from Google Sheet...");
       
@@ -1121,6 +1151,26 @@
           r.classList.add("hidden");
         }
       }
+    }
+
+    /**
+     * Membuka modal tambah customer baru dan melakukan reset nilai field secara total (REVISI SOLUSI PERMANEN)
+     */
+    function openAddCustomerModal() {
+      document.getElementById("customerModalTitle").innerText = "Add New Customer";
+      document.getElementById("customerForm").reset();
+      document.getElementById("custID").value = "";
+      
+      // Reset input link berkas dokumen manual ke string kosong
+      document.getElementById("custKtpLink").value = "";
+      document.getElementById("custNpwpLink").value = "";
+      document.getElementById("custNibLink").value = "";
+      document.getElementById("custHakiLink").value = "";
+      document.getElementById("custMouLink").value = "";
+      document.getElementById("custBpomLink").value = "";
+      document.getElementById("custOtherLink").value = "";
+      
+      openModal("customerModal");
     }
 
     function editCustomer(c) {
