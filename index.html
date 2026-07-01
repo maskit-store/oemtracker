@@ -448,7 +448,7 @@
               </div>
 
               <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="stagesContainer">
-                <!-- 12 Dynamic Step Cards generated via JavaScript -->
+                <!-- 12 Dynamic Step Cards -->
               </div>
             </div>
           </div>
@@ -915,6 +915,7 @@
       }
     }
 
+    // Mengaktifkan modal secara responsif
     function openModal(id) {
       document.getElementById(id).classList.remove("hidden");
     }
@@ -1080,7 +1081,7 @@
       selectProj.innerHTML = optionsHtml;
     }
 
-    // --- CUSTOMERS CRUD VIEW IMPLEMENTATION ---
+    // --- CUSTOMERS CRUD VIEW IMPLEMENTATION (REVISI SANGAT KUAT) ---
     function renderCustomersTable() {
       const tbody = document.getElementById("customersTableBody");
       tbody.innerHTML = "";
@@ -1111,9 +1112,10 @@
           }
         });
 
+        // SOLUSI UTAMA: Mengirimkan ID bertipe string bersih ketimbang seluruh JSON mentah
         const actions = currentUser.role === "admin" ? `
           <div class="flex items-center justify-end space-x-2">
-            <button onclick='editCustomer(${JSON.stringify(c)})' class="p-2 text-slate-800 hover:bg-brandTurquoise/20 rounded-lg transition" title="Edit Customer"><i class="fa-solid fa-pen-to-square"></i></button>
+            <button onclick="editCustomer('${c.id}')" class="p-2 text-slate-800 hover:bg-brandTurquoise/20 rounded-lg transition" title="Edit Customer"><i class="fa-solid fa-pen-to-square"></i></button>
             <button onclick="confirmDeleteCustomer('${c.id}')" class="p-2 text-rose-600 hover:bg-rose-50 rounded-lg transition" title="Delete Customer"><i class="fa-solid fa-trash-can"></i></button>
           </div>
         ` : `<span class="text-xs text-slate-400 font-bold">Read-Only</span>`;
@@ -1173,17 +1175,21 @@
       openModal("customerModal");
     }
 
-    function editCustomer(c) {
+    // Mengambil data customer berdasarkan ID yang bersih dari memori lokal (Mencegah Silent-Crash)
+    function editCustomer(id) {
+      const c = globalData.customers.find(item => item.id === id);
+      if (!c) return;
+
       document.getElementById("customerModalTitle").innerText = "Modify Customer Details";
       document.getElementById("custID").value = c.id;
-      document.getElementById("custName").value = c.name;
-      document.getElementById("custPhone").value = c.phone;
-      document.getElementById("custEmail").value = c.email;
-      document.getElementById("custCompany").value = c.company;
-      document.getElementById("custBrand").value = c.brand;
-      document.getElementById("custSocial").value = c.socialMedia;
-      document.getElementById("custAddress").value = c.address;
-      document.getElementById("custNotes").value = c.notes;
+      document.getElementById("custName").value = c.name || "";
+      document.getElementById("custPhone").value = c.phone || "";
+      document.getElementById("custEmail").value = c.email || "";
+      document.getElementById("custCompany").value = c.company || "";
+      document.getElementById("custBrand").value = c.brand || "";
+      document.getElementById("custSocial").value = c.socialMedia || "";
+      document.getElementById("custAddress").value = c.address || "";
+      document.getElementById("custNotes").value = c.notes || "";
       
       document.getElementById("custKtpLink").value = c.ktpLink || "";
       document.getElementById("custNpwpLink").value = c.npwpLink || "";
@@ -1292,7 +1298,7 @@
     }
 
 
-    // --- PROSPECTS CRUD VIEW IMPLEMENTATION ---
+    // --- PROSPECTS CRUD VIEW IMPLEMENTATION (REVISI AMAN) ---
     function renderProspectsTable() {
       const tbody = document.getElementById("prospectsTableBody");
       tbody.innerHTML = "";
@@ -1321,9 +1327,10 @@
           ? `<a href="${p.documentLink}" target="_blank" class="inline-flex items-center space-x-1.5 px-3 py-1 bg-brandTurquoise/20 hover:bg-brandTurquoise/40 text-slate-900 font-extrabold rounded-lg text-xs border border-brandTurquoise transition"><i class="fa-solid fa-file-arrow-up text-[11px]"></i><span>View Document</span></a>`
           : `<span class="text-xs text-slate-400 font-semibold">No Doc Uploaded</span>`;
 
+        // SOLUSI UTAMA: Mengirimkan ID bertipe string bersih ketimbang seluruh JSON mentah
         const actions = currentUser.role === "admin" ? `
           <div class="flex items-center justify-end space-x-2">
-            <button onclick='editProspect(${JSON.stringify(p)})' class="p-2 text-slate-800 hover:bg-brandTurquoise/20 rounded-lg transition" title="Modify Prospect"><i class="fa-solid fa-pen-to-square"></i></button>
+            <button onclick="editProspect('${p.id}')" class="p-2 text-slate-800 hover:bg-brandTurquoise/20 rounded-lg transition" title="Modify Prospect"><i class="fa-solid fa-pen-to-square"></i></button>
             <button onclick="confirmDeleteProspect('${p.id}')" class="p-2 text-rose-600 hover:bg-rose-50 rounded-lg transition" title="Delete Prospect"><i class="fa-solid fa-trash-can"></i></button>
           </div>
         ` : `<span class="text-xs text-slate-400 font-bold">Read-Only</span>`;
@@ -1365,7 +1372,10 @@
       openModal("prospectModal");
     }
 
-    function editProspect(p) {
+    function editProspect(id) {
+      const p = globalData.prospects.find(item => item.id === id);
+      if (!p) return;
+
       document.getElementById("prospectModalTitle").innerText = "Modify Sales Stage Progress";
       document.getElementById("prospectId").value = p.id;
       document.getElementById("prospectCustomerId").value = p.customerId;
@@ -1438,17 +1448,6 @@
           }
         })
         .catch(() => showSpinner(false));
-    }
-
-    function calculateDaysSince(dateString) {
-      if (!dateString || dateString.trim() === "") return 0;
-      const dpDate = new Date(dateString);
-      const today = new Date();
-      dpDate.setHours(0, 0, 0, 0);
-      today.setHours(0, 0, 0, 0);
-      const diffTime = today - dpDate;
-      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-      return diffDays < 0 ? 0 : diffDays;
     }
 
     function confirmDeleteProspect(id) {
@@ -1851,7 +1850,7 @@
     }
 
 
-    // --- USERS CRUD VIEW IMPLEMENTATION (ADMIN ONLY) ---
+    // --- USERS CRUD VIEW IMPLEMENTATION (REVISI AMAN) ---
     function renderUsersTable() {
       const tbody = document.getElementById("usersTableBody");
       tbody.innerHTML = "";
@@ -1872,7 +1871,7 @@
           </td>
           <td class="px-6 py-4 text-right">
             <div class="flex items-center justify-end space-x-2">
-              <button onclick='editUser(${JSON.stringify(u)})' class="p-2 text-slate-800 hover:bg-brandTurquoise/20 rounded-lg transition" title="Modify User"><i class="fa-solid fa-pen-to-square"></i></button>
+              <button onclick="editUser('${u.id}')" class="p-2 text-slate-800 hover:bg-brandTurquoise/20 rounded-lg transition" title="Modify User"><i class="fa-solid fa-pen-to-square"></i></button>
               <button onclick="confirmDeleteUser('${u.id}')" class="p-2 text-rose-600 hover:bg-rose-50 rounded-lg transition" title="Delete User" ${u.username === 'admin' ? 'disabled class="opacity-30 cursor-not-allowed"' : ''}><i class="fa-solid fa-trash-can"></i></button>
             </div>
           </td>
@@ -1888,7 +1887,10 @@
       openModal("userModal");
     }
 
-    function editUser(u) {
+    function editUser(id) {
+      const u = globalData.users.find(item => item.id === id);
+      if (!u) return;
+
       document.getElementById("userModalTitle").innerText = "Modify System User";
       document.getElementById("userId").value = u.id;
       document.getElementById("userName").value = u.name;
