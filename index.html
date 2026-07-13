@@ -1156,7 +1156,7 @@
     }
 
     /**
-     * Membuka modal tambah customer baru dan melakukan reset nilai field secara total (REVISI SOLUSI PERMANEN)
+     * Membuka modal tambah customer baru dan melakukan reset nilai field secara total
      */
     function openAddCustomerModal() {
       document.getElementById("customerModalTitle").innerText = "Add New Customer";
@@ -1464,6 +1464,26 @@
             }
           })
           .catch(() => showSpinner(false));
+      }
+    }
+
+    /**
+     * PERBAIKAN UTAMA: Menghitung selisih hari dari tanggal bayar DP sampai hari ini (Count Days)
+     * Kode ini sebelumnya terhapus dari berkas index.html sehingga memicu "ReferenceError" saat pemanggilan renderProjectsTable.
+     */
+    function calculateDaysSince(dateString) {
+      if (!dateString || dateString.trim() === "") return 0;
+      try {
+        const dpDate = new Date(dateString);
+        const today = new Date();
+        dpDate.setHours(0, 0, 0, 0);
+        today.setHours(0, 0, 0, 0);
+        const diffTime = today - dpDate;
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        return diffDays < 0 ? 0 : diffDays;
+      } catch (e) {
+        console.error("Gagal menghitung selisih hari:", e);
+        return 0;
       }
     }
 
